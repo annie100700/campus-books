@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: campus-books
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: Annie
+    password: ${DB_PASSWORD}
+    url: jdbc:mysql://127.0.0.1:3306/campus_books
+  jpa:
+    properties:
+      hibernate:
+        type:
+          json_format_mapper: com.annie.campus_books.utilities.JsonFormatterUtil
+        format-sql: true
+      database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB

@@ -1,0 +1,49 @@
+package com.annie.campus_books.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+@AllArgsConstructor
+@NoArgsConstructor
+//@Getter
+//@Setter
+@Data
+@Entity
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
+    private String author;
+    private String publisher;
+
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @JoinColumn(name = "conditionId",referencedColumnName = "conditionId")
+    private BookCondition bookCondition;
+
+    @ManyToOne
+    @JoinColumn(name = "sellerAccount",referencedColumnName = "account")
+    private User seller;
+
+    private BigDecimal listPrice;
+    private BigDecimal sellingPrice;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    private List<Status> status=new ArrayList<>();
+    public enum Status {
+        FOR_SALE,
+        SOLD_OUT
+    }
+
+    private String imageName;
+    private String imageType;
+    @Lob
+    private byte[] imageData;
+
+}
