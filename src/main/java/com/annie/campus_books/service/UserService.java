@@ -31,10 +31,10 @@ public class UserService implements UserDetailsService {
         return repo.findById(userAccount).orElse(null);
     }
 
-    public User updateUserInfo(User user, UserInfoRequest userInfoRequest) {
+    public void updateUserInfo(User user, UserInfoRequest userInfoRequest) {
         user.setEmail(userInfoRequest.getEmail());
         user.setAddress(userInfoRequest.getAddress());
-        return repo.save(user);
+        repo.save(user);
     }
 
     public void deleteUserByAccount(String userAccount) {
