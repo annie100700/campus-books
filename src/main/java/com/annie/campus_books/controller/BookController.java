@@ -2,7 +2,9 @@ package com.annie.campus_books.controller;
 
 import com.annie.campus_books.dto.request.BookInfoRequest;
 import com.annie.campus_books.model.Book;
+import com.annie.campus_books.model.User;
 import com.annie.campus_books.service.BookService;
+import com.annie.campus_books.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,35 +20,43 @@ import java.util.List;
 public class BookController {
 
     @Autowired
-    private BookService service;
+    private BookService bookService;
 
-    @GetMapping("/")
-    public ResponseEntity<List<Book>> getAllBooks() {
-        return new ResponseEntity<>(service.getAllBooks(),HttpStatus.OK);
-    }
-
-    @GetMapping("/{bookId}")
-    public ResponseEntity<Book> getBookById(@PathVariable int bookId) {
-        Book book=service.getBookById(bookId);
-        if(book!=null)
-            return new ResponseEntity<>(book, HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/")
-    public ResponseEntity<?> addBook(@RequestPart Book book,@RequestPart MultipartFile imageFile) {
+    public ResponseEntity<?> addBook(@RequestPart Book book,@RequestPart MultipartFile imageFile,
+                                     @RequestPart String sellerAccount) {
         try {
-            Book addedBook = service.addBook(book,imageFile);
+            User seller=userService.getUserByAccount(sellerAccount);
+            if(seller==null){
+                return new ResponseEntity<>("seller not found",HttpStatus.NOT_FOUND);
+            }
+            Book addedBook = bookService.addBook(book,imageFile,seller);
             return  new ResponseEntity<>(addedBook, HttpStatus.CREATED);
         } catch (Exception e) {
             return  new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @GetMapping("/")
+    public ResponseEntity<List<Book>> getAllBooks() {
+        return new ResponseEntity<>(bookService.getAllBooks(),HttpStatus.OK);
+    }
+
+    @GetMapping("/{bookId}")
+    public ResponseEntity<Book> getBookById(@PathVariable int bookId) {
+        Book book= bookService.getBookById(bookId);
+        if(book!=null)
+            return new ResponseEntity<>(book, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @GetMapping("/{bookId}/image")
     public ResponseEntity<byte[]> getBookImageById(@PathVariable int bookId) {
-        Book book=service.getBookById(bookId);
+        Book book= bookService.getBookById(bookId);
         byte[] imageFile=book.getImageData();
         return ResponseEntity.ok().body(imageFile);
     }
@@ -55,9 +65,9 @@ public class BookController {
     public ResponseEntity<String> updateBook(@PathVariable int bookId,
                                              @RequestPart BookInfoRequest bookInfoRequest,
                                              @RequestPart MultipartFile imageFile) {
-        Book book= service.getBookById(bookId);
+        Book book= bookService.getBookById(bookId);
         try {
-            service.updateBook(book,bookInfoRequest,imageFile);
+            bookService.updateBook(book,bookInfoRequest,imageFile);
         } catch (IOException e) {
             return new ResponseEntity<>("Failed to update",HttpStatus.BAD_REQUEST);
         }
@@ -65,20 +75,20 @@ public class BookController {
 
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Book>> searchBooks(@RequestParam String keyword) {
+        List<Book> books= bookService.searchBooks(keyword);
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{bookId}")
     public ResponseEntity<String> deleteBookById(@PathVariable int bookId) {
-        Book book=service.getBookById(bookId);
+        Book book= bookService.getBookById(bookId);
         if(book!=null) {
-            service.deleteBookById(bookId);
+            bookService.deleteBookById(bookId);
             return new ResponseEntity<>("Deleted", HttpStatus.OK);
         }else
             return new ResponseEntity<>("Deleted book doesn't exist", HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<List<Book>> searchBooks(@RequestParam String keyword) {
-        List<Book> books=service.searchBooks(keyword);
-        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
 }
