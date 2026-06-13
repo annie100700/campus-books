@@ -13,19 +13,19 @@ import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin
-@RequestMapping("/campus-books")
+@RequestMapping("/api.campus-books.com/books")
 @RestController
 public class BookController {
 
     @Autowired
     private BookService service;
 
-    @GetMapping("/books")
+    @GetMapping("/")
     public ResponseEntity<List<Book>> getAllBooks() {
         return new ResponseEntity<>(service.getAllBooks(),HttpStatus.OK);
     }
 
-    @GetMapping("/book/{bookId}")
+    @GetMapping("/{bookId}")
     public ResponseEntity<Book> getBookById(@PathVariable int bookId) {
         Book book=service.getBookById(bookId);
         if(book!=null)
@@ -34,7 +34,7 @@ public class BookController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/book")
+    @PostMapping("/")
     public ResponseEntity<?> addBook(@RequestPart Book book,@RequestPart MultipartFile imageFile) {
         try {
             Book addedBook = service.addBook(book,imageFile);
@@ -44,14 +44,14 @@ public class BookController {
         }
     }
 
-    @GetMapping("/book/{bookId}/image")
+    @GetMapping("/{bookId}/image")
     public ResponseEntity<byte[]> getBookImageById(@PathVariable int bookId) {
         Book book=service.getBookById(bookId);
         byte[] imageFile=book.getImageData();
         return ResponseEntity.ok().body(imageFile);
     }
 
-    @PutMapping("/book/{bookId}")
+    @PutMapping("/{bookId}")
     public ResponseEntity<String> updateBook(@PathVariable int bookId,
                                              @RequestPart BookInfoRequest bookInfoRequest,
                                              @RequestPart MultipartFile imageFile) {
@@ -65,7 +65,7 @@ public class BookController {
 
     }
 
-    @DeleteMapping("/book/{bookId}")
+    @DeleteMapping("/{bookId}")
     public ResponseEntity<String> deleteBookById(@PathVariable int bookId) {
         Book book=service.getBookById(bookId);
         if(book!=null) {
@@ -75,7 +75,7 @@ public class BookController {
             return new ResponseEntity<>("Deleted book doesn't exist", HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/books/search")
+    @GetMapping("/search")
     public ResponseEntity<List<Book>> searchBooks(@RequestParam String keyword) {
         List<Book> books=service.searchBooks(keyword);
         return new ResponseEntity<>(books, HttpStatus.OK);
