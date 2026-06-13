@@ -20,16 +20,17 @@ public class UserController {
     private UserService service;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user,String reEnterPassword) {
-        if (service.accountBeenUsed(user.getAccount())) {
+    public ResponseEntity<?> register(@RequestPart User tempUser,@RequestPart String reEnterPassword) {
+        if (service.accountBeenUsed(tempUser.getAccount())) {
             return new ResponseEntity<>("Account already exist", HttpStatus.BAD_REQUEST);
-        } else if (service.emailBeenUsed(user.getEmail())) {
+        } else if (service.emailBeenUsed(tempUser.getEmail())) {
             return new ResponseEntity<>("Email already been used", HttpStatus.BAD_REQUEST);
-        } else if (!(reEnterPassword.equals(user.getPassword()))) {
+        } else if (!(reEnterPassword.equals(tempUser.getPassword()))) {
             return new ResponseEntity<>("Password doesn't match", HttpStatus.BAD_REQUEST);
-        } else
-            service.register(user.getAccount(), user.getPassword(), user.getEmail(), user.getAddress());
-        return new ResponseEntity<>("User added", HttpStatus.CREATED);
+        } else{
+            User user= service.register(tempUser);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        }
     }
 
     @GetMapping("/")
@@ -47,11 +48,11 @@ public class UserController {
     }
 
     @PutMapping("/{account}")
-    public ResponseEntity<String> updateUserInfo(@PathVariable String account, @RequestBody UserInfoRequest userInfoRequest) {
+    public ResponseEntity<?> updateUserInfo(@PathVariable String account, @RequestBody UserInfoRequest userInfoRequest) {
         User user = service.getUserByAccount(account);
         if (user != null) {
-            service.updateUserInfo(user, userInfoRequest);
-            return new ResponseEntity<>("Updated", HttpStatus.OK);
+            User updatedUser= service.updateUserInfo(user, userInfoRequest);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         }
 
         return new ResponseEntity<>("Updated user doesn't exist", HttpStatus.BAD_REQUEST);
