@@ -31,10 +31,10 @@ public class UserService implements UserDetailsService {
         return repo.findById(userAccount).orElse(null);
     }
 
-    public void updateUserInfo(User user, UserInfoRequest userInfoRequest) {
+    public User updateUserInfo(User user, UserInfoRequest userInfoRequest) {
         user.setEmail(userInfoRequest.getEmail());
         user.setAddress(userInfoRequest.getAddress());
-        repo.save(user);
+        return repo.save(user);
     }
 
     public void deleteUserByAccount(String userAccount) {
@@ -49,18 +49,18 @@ public class UserService implements UserDetailsService {
         return repo.existsById(email);
     }
 
-    public void register(String account, String password, String email, String address) {
-        String encodedPassword = passwordEncoder.encode(password);
+    public User register(User tempUser) {
+        String encodedPassword = passwordEncoder.encode(tempUser.getPassword());
         User user = new User();
-        user.setAccount(account);
+        user.setAccount(tempUser.getAccount());
         user.setPassword(encodedPassword);
-        user.setEmail(email);
+        user.setEmail(tempUser.getEmail());
         List<User.Role> role = new ArrayList<>();
         role.add(User.Role.USER);
         user.setRole(role);
-        if (address != null)
-            user.setAddress(address);
-        repo.save(user);
+        if (tempUser.getAddress() != null)
+            user.setAddress(tempUser.getAddress());
+        return repo.save(user);
     }
 
     public boolean login(String account, String password) {
