@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @CrossOrigin
-@RequestMapping("/campus-books")
+@RequestMapping("/api.campus-books.com/orders")
 @RestController
 public class OrderController {
 
@@ -30,7 +30,7 @@ public class OrderController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/order")
+    @PostMapping("/")
     public ResponseEntity<?> createOrder(@RequestPart UserOrder order,
                                          @RequestPart OrderRequest orderRequest) {
         Book book = bookService.getBookById(orderRequest.getBookId());
@@ -44,27 +44,27 @@ public class OrderController {
             return new ResponseEntity<>("Order created successfully", HttpStatus.CREATED);
     }
 
-    @GetMapping("/orders")
+    @GetMapping("/")
     public ResponseEntity<List<UserOrder>> getAllOrders() {
         return new ResponseEntity<>(orderService.getAllOrders(),HttpStatus.OK);
     }
 
-    @GetMapping("/order/{orderId}")
+    @GetMapping("/{orderId}")
     public ResponseEntity<UserOrder> getOrderById(@PathVariable UUID orderId) {
         return new ResponseEntity<>(orderService.getOrderById(orderId),HttpStatus.OK);
     }
 
-    @GetMapping("/{account}/order/purchases")
+    @GetMapping("/{account}/purchases")
     public ResponseEntity<List<UserOrder>> getUserPurchases(@PathVariable String account) {
         return new ResponseEntity<>(orderService.getUserPurchases(account),HttpStatus.OK);
     }
 
-    @GetMapping("/{account}/order/sales")
+    @GetMapping("/{account}/sales")
     public ResponseEntity<List<UserOrder>> getUserSales(@PathVariable String account) {
         return new ResponseEntity<>(orderService.getUserSales(account),HttpStatus.OK);
     }
 
-    @PatchMapping("/order/{orderId}/completed")
+    @PatchMapping("/{orderId}/complete")
     public ResponseEntity<String> completeOrderById(@PathVariable UUID orderId) {
         UserOrder order= orderService.getOrderById(orderId);
         if (order!=null){
@@ -74,15 +74,7 @@ public class OrderController {
         return new ResponseEntity<>("Order not found",HttpStatus.NOT_FOUND);
     }
 
-//    @PutMapping("/order/{orderId}")
-//    public ResponseEntity<String> updateOrder(@PathVariable UUID orderId,
-//                                              @RequestPart UserOrder order,
-//                                              @RequestPart Book book,
-//                                              @RequestPart User buyer){
-//        return new ResponseEntity<>("Order updated successfully", HttpStatus.OK);
-//    }
-
-    @PatchMapping("/order/{orderId}/cancelled")
+    @PatchMapping("/{orderId}/cancel")
     public ResponseEntity<String> cancelOrderById(@PathVariable UUID orderId) {
         UserOrder order = orderService.getOrderById(orderId);
         if(order!=null){
@@ -92,7 +84,7 @@ public class OrderController {
         return new ResponseEntity<>("Order not found",HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/order/{orderId}")
+    @DeleteMapping("/{orderId}")
     public ResponseEntity<String> deleteOrderById(@PathVariable UUID orderId) {
         UserOrder order = orderService.getOrderById(orderId);
         if(order!=null){
