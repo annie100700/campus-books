@@ -31,7 +31,7 @@ public class OrderController {
     private UserService userService;
 
     @PostMapping("/")
-    public ResponseEntity<?> createOrder(@RequestPart UserOrder order,
+    public ResponseEntity<?> createOrder(@RequestPart UserOrder tempOrder,
                                          @RequestPart OrderRequest orderRequest) {
         Book book = bookService.getBookById(orderRequest.getBookId());
         User buyer=userService.getUserByAccount(orderRequest.getBuyerAccount());
@@ -39,9 +39,10 @@ public class OrderController {
             return new ResponseEntity<>("Can not buy your own book",HttpStatus.BAD_REQUEST);
         } else if (book.getStatus().contains(Book.Status.SOLD_OUT)) {
             return  new ResponseEntity<>("This book already sold out",HttpStatus.BAD_REQUEST);
-        }else
-            orderService.createOrder(order,book,buyer);
-            return new ResponseEntity<>("Order created successfully", HttpStatus.CREATED);
+        }else{
+            UserOrder userOrder= orderService.createOrder(tempOrder,book,buyer);
+            return new ResponseEntity<>(userOrder, HttpStatus.CREATED);
+        }
     }
 
     @GetMapping("/")
@@ -78,7 +79,8 @@ public class OrderController {
     public ResponseEntity<String> cancelOrderById(@PathVariable UUID orderId) {
         UserOrder order = orderService.getOrderById(orderId);
         if(order!=null){
-            orderService.cancelOrder(order);
+            Book book = order.getBook();
+            orderService.cancelOrder(order,book);
             return new ResponseEntity<>("Order cancelled successfully",HttpStatus.OK);
         }
         return new ResponseEntity<>("Order not found",HttpStatus.NOT_FOUND);
