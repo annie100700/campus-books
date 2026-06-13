@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @CrossOrigin
-@RequestMapping("/campus-books")
+@RequestMapping("/api.campus-books.com/users")
 @RestController
 public class UserController {
 
     @Autowired
     private UserService service;
 
-    @PostMapping("/user/register")
+    @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user,String reEnterPassword) {
         if (service.accountBeenUsed(user.getAccount())) {
             return new ResponseEntity<>("Account already exist", HttpStatus.BAD_REQUEST);
@@ -32,12 +32,12 @@ public class UserController {
         return new ResponseEntity<>("User added", HttpStatus.CREATED);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/")
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(service.getAllUsers(), HttpStatus.OK);
     }
 
-    @GetMapping("/user/{userAccount}")
+    @GetMapping("/{userAccount}")
     public ResponseEntity<User> getUserByAccount(@PathVariable String userAccount) {
         User user = service.getUserByAccount(userAccount);
         if (user != null)
@@ -46,7 +46,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/user/{account}")
+    @PutMapping("/{account}")
     public ResponseEntity<String> updateUserInfo(@PathVariable String account, @RequestBody UserInfoRequest userInfoRequest) {
         User user = service.getUserByAccount(account);
         if (user != null) {
@@ -58,7 +58,7 @@ public class UserController {
 
     }
 
-    @PatchMapping("/user/{account}/password")
+    @PatchMapping("/{account}/password")
     public ResponseEntity<String> changePassword(@PathVariable String account,
                                                  @RequestPart String oldPassword, @RequestPart String newPassword) {
         User user = service.getUserByAccount(account);
@@ -70,17 +70,17 @@ public class UserController {
         return new ResponseEntity<>("Password changed", HttpStatus.OK);
     }
 
-    @DeleteMapping("/user/{userAccount}")
-    public ResponseEntity<String> deleteUserByAccount(@PathVariable String userAccount) {
-        User user = service.getUserByAccount(userAccount);
+    @DeleteMapping("/{account}")
+    public ResponseEntity<String> deleteUserByAccount(@PathVariable String account) {
+        User user = service.getUserByAccount(account);
         if (user != null) {
-            service.deleteUserByAccount(userAccount);
+            service.deleteUserByAccount(account);
             return new ResponseEntity<>("Deleted", HttpStatus.OK);
         } else
             return new ResponseEntity<>("Deleted user doesn't exist", HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
         boolean login = service.login(user.getAccount(), user.getPassword());
         if (login)
