@@ -2,6 +2,7 @@ package com.annie.campus_books.service;
 
 import com.annie.campus_books.dto.request.BookInfoRequest;
 import com.annie.campus_books.model.Book;
+import com.annie.campus_books.model.User;
 import com.annie.campus_books.repository.BookRepo;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,9 @@ public class BookService {
         return repo.findById(bookId).orElse(null);
     }
 
-    public Book addBook(Book book, MultipartFile imageFile) throws IOException {
+    public Book addBook(Book book, MultipartFile imageFile, User seller) throws IOException {
+        book.setSeller(seller);
+
         List<Book.Status> status = new ArrayList<>();
         status.add(Book.Status.FOR_SALE);
         book.setStatus(status);
