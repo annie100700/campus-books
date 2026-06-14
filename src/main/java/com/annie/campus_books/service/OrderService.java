@@ -7,6 +7,7 @@ import com.annie.campus_books.repository.BookRepo;
 import com.annie.campus_books.repository.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class OrderService {
     @Autowired
     private BookRepo bookRepo;
 
+    @Transactional
     public UserOrder createOrder(UserOrder order, Book book, User buyer) {
         order.setBook(book);
         order.setBookName(book.getName());
@@ -38,6 +40,7 @@ public class OrderService {
         List<Book.Status> bookStatus = new ArrayList<>();
         bookStatus.add(Book.Status.SOLD_OUT);
         book.setStatus(bookStatus);
+        bookRepo.save(book);
         return orderRepo.save(order);
     }
 
@@ -64,6 +67,7 @@ public class OrderService {
         orderRepo.save(order);
     }
 
+    @Transactional
     public void cancelOrder(UserOrder order,Book book) {
         List<UserOrder.Status> orderStatus=new ArrayList<>();
         orderStatus.add(UserOrder.Status.CANCELED);
