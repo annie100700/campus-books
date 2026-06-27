@@ -15,6 +15,7 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -118,4 +119,16 @@ public class BookServiceTest {
         return bookInfoRequest;
     }
 
+    @Test
+    void searchBooks_shouldReturnMatchedBooks() {
+        List<Book> books = List.of(new Book());
+        String keyword = "keyword";
+        when(bookRepo.searchBooks(keyword)).thenReturn(books);
+
+        List<Book> matchedBooks =bookService.searchBooks(keyword);
+
+        assertEquals(books.size(),matchedBooks.size());
+
+        verify(bookRepo).searchBooks(keyword);
+    }
 }
