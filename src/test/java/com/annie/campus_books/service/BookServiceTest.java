@@ -120,6 +120,28 @@ public class BookServiceTest {
     }
 
     @Test
+    void updateBook_withOutImage_shouldKeepOldImage() throws IOException {
+        Book book = new Book();
+        String newName = "newName";
+        String newAuthor = "newAuthor";
+        String newPublisher = "newPublisher";
+        BookCondition  bookCondition = new BookCondition();
+        BigDecimal newListPrice= new BigDecimal("100");
+        BigDecimal newSellingPrice= new BigDecimal("120");
+        BookInfoRequest bookInfoRequest = getBookInfoRequest(newName,newAuthor,newPublisher,bookCondition,newListPrice,newSellingPrice);
+
+        bookService.updateBook(book,bookInfoRequest, null);
+
+        assertEquals(newName,book.getName());
+        assertEquals(newAuthor,book.getAuthor());
+        assertEquals(newPublisher,book.getPublisher());
+        assertEquals(bookCondition,book.getBookCondition());
+        assertEquals(newListPrice,book.getListPrice());
+        assertEquals(newSellingPrice,book.getSellingPrice());
+        verify(bookRepo).save(book);
+    }
+
+    @Test
     void searchBooks_shouldReturnMatchedBooks() {
         List<Book> books = List.of(new Book());
         String keyword = "keyword";
