@@ -53,9 +53,11 @@ public class BookService {
         book.setListPrice(bookInfoRequest.getListPrice());
         book.setSellingPrice(bookInfoRequest.getSellingPrice());
 
-        book.setImageData(imageFile.getBytes());
-        book.setImageName(imageFile.getOriginalFilename());
-        book.setImageType(imageFile.getContentType());
+        if(imageFile!=null&& !imageFile.isEmpty()){
+            book.setImageData(imageFile.getBytes());
+            book.setImageName(imageFile.getOriginalFilename());
+            book.setImageType(imageFile.getContentType());
+        }
         repo.save(book);
     }
 
