@@ -14,10 +14,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -52,6 +55,17 @@ public class BookControllerTest {
                 .andExpect(status().isCreated());
 
         verify(bookService).addBook(any(Book.class),eq(imageFile),eq(seller));
+    }
+
+    @Test
+    void getAllBooks_shouldReturnAllBooks() throws Exception {
+        List<Book> books = List.of(new Book());
+        when(bookService.getAllBooks()).thenReturn(books);
+
+        mockMvc.perform(get("/api.campus-books.com/books/"))
+        .andExpect(status().isOk());
+
+        verify(bookService).getAllBooks();
     }
 
 }
