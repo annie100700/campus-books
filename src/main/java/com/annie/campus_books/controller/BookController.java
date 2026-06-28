@@ -30,9 +30,6 @@ public class BookController {
                                      @RequestPart String sellerAccount) {
         try {
             User seller=userService.getUserByAccount(sellerAccount);
-            if(seller==null){
-                return new ResponseEntity<>("seller not found",HttpStatus.NOT_FOUND);
-            }
             Book addedBook = bookService.addBook(book,imageFile,seller);
             return  new ResponseEntity<>(addedBook, HttpStatus.CREATED);
         } catch (Exception e) {
