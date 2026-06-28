@@ -22,6 +22,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookController.class)
@@ -66,6 +67,20 @@ public class BookControllerTest {
         .andExpect(status().isOk());
 
         verify(bookService).getAllBooks();
+    }
+
+    @Test
+    void getBookById_bookFound_shouldReturnBook() throws Exception {
+        int bookId = 1;
+        Book book = new Book();
+        book.setId(bookId);
+        when(bookService.getBookById(bookId)).thenReturn(book);
+
+        mockMvc.perform(get("/api.campus-books.com/books/"+bookId))
+        .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(bookId));
+
+        verify(bookService).getBookById(bookId);
     }
 
 }
