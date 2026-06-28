@@ -57,8 +57,11 @@ public class BookController {
     @GetMapping("/{bookId}/image")
     public ResponseEntity<byte[]> getBookImageById(@PathVariable int bookId) {
         Book book= bookService.getBookById(bookId);
-        byte[] imageFile=book.getImageData();
-        return ResponseEntity.ok().body(imageFile);
+        if(book!=null){
+            byte[] imageFile=book.getImageData();
+            return ResponseEntity.ok().body(imageFile);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/{bookId}")
