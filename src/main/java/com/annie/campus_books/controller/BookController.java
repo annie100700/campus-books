@@ -69,13 +69,15 @@ public class BookController {
                                              @RequestPart BookInfoRequest bookInfoRequest,
                                              @RequestPart MultipartFile imageFile) {
         Book book= bookService.getBookById(bookId);
+        if(book!=null){
         try {
             bookService.updateBook(book,bookInfoRequest,imageFile);
         } catch (IOException e) {
             return new ResponseEntity<>("Failed to update",HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("Updated", HttpStatus.OK);
-
+        }
+        return new ResponseEntity<>("updated book not found",HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/search")
