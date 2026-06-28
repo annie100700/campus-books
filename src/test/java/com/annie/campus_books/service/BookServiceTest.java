@@ -80,7 +80,7 @@ public class BookServiceTest {
     }
 
     @Test
-    void updateBook_shouldUpdateBookInfo() throws IOException {
+    void updateBook_withImage_shouldUpdateBookInfo() throws IOException {
         Book book = new Book();
         String newName = "newName";
         String newAuthor = "newAuthor";
