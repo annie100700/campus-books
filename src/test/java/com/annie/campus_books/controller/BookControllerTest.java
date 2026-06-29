@@ -83,4 +83,15 @@ public class BookControllerTest {
         verify(bookService).getBookById(bookId);
     }
 
+    @Test
+    void getBookById_bookNotFound_shouldReturn404() throws Exception {
+        int bookId = 1;
+        when(bookService.getBookById(bookId)).thenReturn(null);
+
+        mockMvc.perform(get("/api.campus-books.com/books/"+bookId))
+                .andExpect(status().isNotFound());
+
+        verify(bookService).getBookById(bookId);
+    }
+
 }
