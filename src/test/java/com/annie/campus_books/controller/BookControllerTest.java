@@ -1,5 +1,6 @@
 package com.annie.campus_books.controller;
 
+import com.annie.campus_books.dto.request.BookInfoRequest;
 import com.annie.campus_books.model.Book;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.service.BookService;
@@ -20,8 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -93,5 +93,30 @@ public class BookControllerTest {
 
         verify(bookService).getBookById(bookId);
     }
+
+    @Test
+    void updateBook_shouldReturn200() throws Exception {
+        int bookId = 1;
+        Book book = new Book();
+        book.setId(bookId);
+        BookInfoRequest bookInfoRequest = new BookInfoRequest();
+        MockMultipartFile idPart=new MockMultipartFile("bookId", "", "text/plain", String.valueOf(bookId).getBytes());
+        MockMultipartFile bookInfoPart=new MockMultipartFile("bookInfoRequest", "", "application/json", objectMapper.writeValueAsBytes(bookInfoRequest));
+        String originalFileName = "book.jpg";
+        byte[] imageData = "test-image".getBytes();
+        MockMultipartFile imagePart=new MockMultipartFile("imageFile", originalFileName, "image/jpeg", imageData);
+        when(bookService.getBookById(bookId)).thenReturn(book);
+
+        mockMvc.perform(multipart("/api.campus-books.com/books/"+bookId)
+                .file(idPart).file(bookInfoPart).file(imagePart)
+                        .with(request -> {
+                            request.setMethod("PUT");
+                            return request;}))
+                .andExpect(status().isOk());
+
+        verify(bookService).updateBook(book,bookInfoRequest,imagePart);
+    }
+
+
 
 }
