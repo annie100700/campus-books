@@ -130,4 +130,16 @@ public class BookControllerTest {
         verify(bookService).deleteBookById(bookId);
     }
 
+    @Test
+    void searchBooks_shouldReturnBooksWith200() throws Exception {
+        String keyword="test";
+        List<Book> books = List.of(new Book());
+        when(bookService.searchBooks(keyword)).thenReturn(books);
+
+        mockMvc.perform(get("/api.campus-books.com/books/search")
+                        .param("keyword", keyword))
+                .andExpect(status().isOk());
+
+        verify(bookService).searchBooks(keyword);
+    }
 }
