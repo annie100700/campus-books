@@ -41,7 +41,7 @@ public class BookControllerTest {
     private UserService userService;
 
     @Test
-    void addBook_shouldReturnAddedBookAnd201() throws Exception {
+    void addBook_shouldReturnAddedBookWith201() throws Exception {
         Book book = new Book();
         MockMultipartFile bookPart=new MockMultipartFile("book","","application/json",objectMapper.writeValueAsBytes(book));
         MockMultipartFile imageFile = new MockMultipartFile("imageFile", "book.jpg", "image/jpeg", "test-image".getBytes());
@@ -59,7 +59,7 @@ public class BookControllerTest {
     }
 
     @Test
-    void getAllBooks_shouldReturnAllBooks() throws Exception {
+    void getAllBooks_shouldReturnAllBooksWith200() throws Exception {
         List<Book> books = List.of(new Book());
         when(bookService.getAllBooks()).thenReturn(books);
 
@@ -70,7 +70,7 @@ public class BookControllerTest {
     }
 
     @Test
-    void getBookById_bookFound_shouldReturnBook() throws Exception {
+    void getBookById_bookFound_shouldReturnBookWith200() throws Exception {
         int bookId = 1;
         Book book = new Book();
         book.setId(bookId);
