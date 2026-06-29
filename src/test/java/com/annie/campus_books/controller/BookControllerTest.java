@@ -117,6 +117,17 @@ public class BookControllerTest {
         verify(bookService).updateBook(book,bookInfoRequest,imagePart);
     }
 
+    @Test
+    void deleteBook_bookFound_shouldReturn200() throws Exception {
+        int bookId = 1;
+        Book book = new Book();
+        book.setId(bookId);
+        when(bookService.getBookById(bookId)).thenReturn(book);
 
+        mockMvc.perform(delete("/api.campus-books.com/books/"+bookId))
+                .andExpect(status().isOk());
+
+        verify(bookService).deleteBookById(bookId);
+    }
 
 }
