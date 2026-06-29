@@ -131,6 +131,15 @@ public class BookControllerTest {
     }
 
     @Test
+    void deleteBook_bookNotFound_shouldReturn404() throws Exception {
+        int bookId = 1;
+        when(bookService.getBookById(bookId)).thenReturn(null);
+
+        mockMvc.perform(delete("/api.campus-books.com/books/"+bookId))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void searchBooks_shouldReturnBooksWith200() throws Exception {
         String keyword="test";
         List<Book> books = List.of(new Book());
