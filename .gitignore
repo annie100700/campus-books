@@ -1,3 +1,4 @@
+src/test/resources/application-test.yaml
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
