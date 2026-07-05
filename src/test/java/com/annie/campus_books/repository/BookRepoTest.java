@@ -44,5 +44,13 @@ public class BookRepoTest {
         assertEquals("test-publisher",books.getFirst().getPublisher());
     }
 
+    @Test
+    public void searchBooks_shouldReturnEmptyList(){
+        String keyword="toast";
+
+        List<Book> books=bookRepo.searchBooks(keyword);
+
+        assertEquals(0,books.size());
+    }
 
 }
