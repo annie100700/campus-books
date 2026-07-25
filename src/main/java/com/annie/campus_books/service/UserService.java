@@ -61,7 +61,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean login(String account, String password) {
-        User user = getUserByAccount(account);
+        User user = repo.findById(account).orElse(null);
         if (user != null) {
             return passwordEncoder.matches(password, user.getPassword());
         }
