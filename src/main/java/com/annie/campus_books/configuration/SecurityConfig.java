@@ -1,10 +1,10 @@
 package com.annie.campus_books.configuration;
 
 import com.annie.campus_books.service.JwtService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,16 +22,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
-        http.
     public JwtService jwtService(@Value("${jwt.secret-key}") String secretKeyStr,
                                  @Value("${jwt.valid-seconds}") int validSeconds) {
     return new JwtService(secretKeyStr, validSeconds);
     }
 
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
+        httpSecurity.
                 formLogin(AbstractHttpConfigurer::disable).
                 csrf(AbstractHttpConfigurer::disable).
-                httpBasic(Customizer.withDefaults()).
+                //httpBasic(Customizer.withDefaults()).
                 authorizeHttpRequests(requests -> requests.
                         requestMatchers(HttpMethod.GET,"/api.campus-books.com/books/").permitAll().
                         requestMatchers(HttpMethod.GET,"/api.campus-books.com/books/*").permitAll().
@@ -44,7 +45,7 @@ public class SecurityConfig {
                         requestMatchers(HttpMethod.GET,"/api.campus-books.com/users/*").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.DELETE,"/api.campus-books.com/orders/*").hasAuthority("ADMIN").
                         anyRequest().authenticated());
-        return http.build();
+        return httpSecurity.build();
     }
 
 }
