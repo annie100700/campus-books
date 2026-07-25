@@ -1,5 +1,6 @@
 package com.annie.campus_books.configuration;
 
+import com.annie.campus_books.service.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,6 +24,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http.
+    public JwtService jwtService(@Value("${jwt.secret-key}") String secretKeyStr,
+                                 @Value("${jwt.valid-seconds}") int validSeconds) {
+    return new JwtService(secretKeyStr, validSeconds);
+    }
+
                 formLogin(AbstractHttpConfigurer::disable).
                 csrf(AbstractHttpConfigurer::disable).
                 httpBasic(Customizer.withDefaults()).
