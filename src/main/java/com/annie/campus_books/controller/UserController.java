@@ -1,11 +1,15 @@
 package com.annie.campus_books.controller;
 
+import com.annie.campus_books.dto.request.LoginRequest;
 import com.annie.campus_books.dto.request.UserInfoRequest;
+import com.annie.campus_books.dto.response.LoginResponse;
 import com.annie.campus_books.model.User;
+import com.annie.campus_books.service.JwtService;
 import com.annie.campus_books.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private JwtService jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestPart User tempUser,@RequestPart String reEnterPassword) {
@@ -82,12 +89,14 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
-        boolean login = service.login(user.getAccount(), user.getPassword());
-        if (login)
-            return new ResponseEntity<>("Login successful", HttpStatus.OK);
-        else
-            return new ResponseEntity<>("Login failed", HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        User user = service.getUserByAccount(loginRequest.getAccount());
+        boolean login = service.login(loginRequest.getAccount(), loginRequest.getPassword());
+        if (login) {
+            String jwt = jwtService.generateLoginAccessToken(user);
+            return new ResponseEntity<>(LoginResponse.of(jwt, user), HttpStatus.OK);
+        }
+        throw  new BadCredentialsException("Invalid username or password");
     }
 
 }
