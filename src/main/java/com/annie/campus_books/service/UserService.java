@@ -4,7 +4,6 @@ import com.annie.campus_books.dto.request.UserInfoRequest;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -68,26 +67,15 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    @SuppressWarnings("NullableProblems")
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = getUserByAccount(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("Can't find user: " + username);
-        }
-        List<SimpleGrantedAuthority> roles = user.getRole().
-                stream().
-                map(role -> new SimpleGrantedAuthority(role.name())).
-                toList();
-        return org.springframework.security.core.userdetails.User.
-                withUsername(username).
-                password(user.getPassword()).
-                authorities(roles).
-                build();
-    }
-
     public void changePassword(User user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
         repo.save(user);
+    }
+
+    @SuppressWarnings("NullableProblems")
+    @Override
+    public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
+        return repo.findById(account).
+                orElseThrow(() -> new UsernameNotFoundException(account+" not exist"));
     }
 }
