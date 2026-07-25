@@ -1,8 +1,6 @@
 package com.annie.campus_books.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -12,8 +10,6 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-//@Setter
-//@Getter
 @Data
 @Entity
 public class User {
@@ -25,8 +21,9 @@ public class User {
     private String email;
     private String address;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    private List<Role> role=new ArrayList<>();
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
     public enum Role {
         ADMIN,USER
     }
