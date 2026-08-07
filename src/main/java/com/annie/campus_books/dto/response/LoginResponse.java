@@ -9,7 +9,7 @@ public class LoginResponse {
     private String account;
     private User.Role role;
 
-    public static LoginResponse of(String jwt, User user) {
+    public static LoginResponse getResponseOf(String jwt, User user) {
         LoginResponse loginResponse=new LoginResponse();
         loginResponse.jwt=jwt;
         loginResponse.account=user.getAccount();
