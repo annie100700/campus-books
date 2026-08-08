@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Getter
 public class LoginResponse {
@@ -12,13 +13,15 @@ public class LoginResponse {
     private String account;
     private User.Role role;
     private Collection<? extends GrantedAuthority> authorities;
+    private Date expirationTime;
 
-    public static LoginResponse getResponseOf(String jwt, User user) {
+    public static LoginResponse getResponseOf( User user,String jwt,Date expiration) {
         LoginResponse loginResponse=new LoginResponse();
         loginResponse.jwt=jwt;
         loginResponse.account=user.getAccount();
         loginResponse.role=user.getRole();
         loginResponse.authorities=user.getAuthorities();
+        loginResponse.expirationTime=expiration;
         return loginResponse;
     }
 }
