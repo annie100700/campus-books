@@ -1,10 +1,7 @@
 package com.annie.campus_books.service;
 
 import com.annie.campus_books.model.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
@@ -31,6 +28,9 @@ public class JwtService {
                 expiration(new Date(expirationMS)).
                 add("account",user.getAccount()).
                 add("role",user.getRole()).
+                add("authorities",user.getAuthorities()).
+                add("email",user.getEmail()).
+                add("address",user.getAddress()).
                 build();
 
         return Jwts.
