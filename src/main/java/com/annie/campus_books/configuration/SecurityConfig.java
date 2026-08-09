@@ -1,5 +1,6 @@
 package com.annie.campus_books.configuration;
 
+import com.annie.campus_books.security.filter.JwtAuthenticationFilter;
 import com.annie.campus_books.service.JwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -28,11 +30,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtAuthenticationFilter jwtAuthenticationFilter) {
         httpSecurity.
                 formLogin(AbstractHttpConfigurer::disable).
                 csrf(AbstractHttpConfigurer::disable).
-                //httpBasic(Customizer.withDefaults()).
                 authorizeHttpRequests(requests -> requests.
                         requestMatchers(HttpMethod.GET,"/api.campus-books.com/books/").permitAll().
                         requestMatchers(HttpMethod.GET,"/api.campus-books.com/books/*").permitAll().
@@ -45,6 +46,7 @@ public class SecurityConfig {
                         requestMatchers(HttpMethod.GET,"/api.campus-books.com/users/*").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.DELETE,"/api.campus-books.com/orders/*").hasAuthority("ADMIN").
                         anyRequest().authenticated());
+                addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
