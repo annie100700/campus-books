@@ -26,7 +26,7 @@ public class SecurityConfig {
     @Bean
     public JwtService jwtService(@Value("${jwt.secret-key}") String secretKeyStr,
                                  @Value("${jwt.valid-seconds}") int validSeconds) {
-    return new JwtService(secretKeyStr, validSeconds);
+        return new JwtService(secretKeyStr, validSeconds);
     }
 
     @Bean
@@ -36,17 +36,17 @@ public class SecurityConfig {
                 csrf(AbstractHttpConfigurer::disable).
                 authorizeHttpRequests(requests -> requests.
                         //permitAll
-                        requestMatchers(HttpMethod.GET,"/api.campus-books.com/books/").permitAll().
-                        requestMatchers(HttpMethod.GET,"/api.campus-books.com/books/{id}").permitAll().
-                        requestMatchers(HttpMethod.GET,"/api.campus-books.com/books/{id}/image").permitAll().
-                        requestMatchers(HttpMethod.GET,"/api.campus-books.com/books/search").permitAll().
+                                requestMatchers(HttpMethod.GET, "/api.campus-books.com/books/").permitAll().
+                        requestMatchers(HttpMethod.GET, "/api.campus-books.com/books/{id}").permitAll().
+                        requestMatchers(HttpMethod.GET, "/api.campus-books.com/books/{id}/image").permitAll().
+                        requestMatchers(HttpMethod.GET, "/api.campus-books.com/books/search").permitAll().
                         requestMatchers(HttpMethod.POST, "/api.campus-books.com/users/register").permitAll().
                         requestMatchers(HttpMethod.POST, "/api.campus-books.com/users/login").permitAll().
                         // hasAuthority
-                        requestMatchers(HttpMethod.GET, "/api.campus-books.com/users/").hasAuthority("ADMIN").
+                                requestMatchers(HttpMethod.GET, "/api.campus-books.com/users/").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.GET, "/api.campus-books.com/users/{account}").hasAuthority("ADMIN").
                         // authenticated
-                        anyRequest().authenticated()).
+                                anyRequest().authenticated()).
                 addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
         return httpSecurity.build();
     }
