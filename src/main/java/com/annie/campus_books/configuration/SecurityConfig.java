@@ -2,6 +2,7 @@ package com.annie.campus_books.configuration;
 
 import com.annie.campus_books.security.filter.JwtAuthenticationFilter;
 import com.annie.campus_books.service.JwtService;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +46,9 @@ public class SecurityConfig {
                         // hasAuthority
                                 requestMatchers(HttpMethod.GET, "/api.campus-books.com/users/").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.GET, "/api.campus-books.com/users/{account}").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.PATCH, "/api.campus-books.com/users/{account}").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.PATCH, "/api.campus-books.com/users/current-user/password").hasAuthority("USER").
+                        requestMatchers(HttpMethod.DELETE, "/api.campus-books.com/users/{account}").hasAuthority("ADMIN").
                         // authenticated
                                 anyRequest().authenticated()).
                 addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
