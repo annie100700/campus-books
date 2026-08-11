@@ -29,6 +29,8 @@ public class User implements UserDetails {
         ADMIN,USER
     }
 
+    private boolean deleted;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
