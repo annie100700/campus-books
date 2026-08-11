@@ -13,7 +13,7 @@ public class LoginResponse {
     private String account;
     private User.Role role;
     private Collection<? extends GrantedAuthority> authorities;
-    private Date expirationTime;
+    private Date expiration;
 
     public static LoginResponse getResponseOf( User user,String jwt,Date expiration) {
         LoginResponse loginResponse=new LoginResponse();
@@ -21,7 +21,8 @@ public class LoginResponse {
         loginResponse.account=user.getAccount();
         loginResponse.role=user.getRole();
         loginResponse.authorities=user.getAuthorities();
-        loginResponse.expirationTime=expiration;
+        loginResponse.expiration=expiration;
         return loginResponse;
     }
+
 }
