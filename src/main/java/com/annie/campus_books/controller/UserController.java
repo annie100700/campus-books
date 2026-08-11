@@ -27,16 +27,17 @@ public class UserController {
     private JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestPart User tempUser,@RequestPart String reEnterPassword) {
-        if (service.accountBeenUsed(tempUser.getAccount())) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+        if (userService.accountBeenUsed(registerRequest.account())) {
             return new ResponseEntity<>("Account already exist", HttpStatus.BAD_REQUEST);
-        } else if (service.emailBeenUsed(tempUser.getEmail())) {
+        } else if (userService.emailBeenUsed(registerRequest.email())) {
             return new ResponseEntity<>("Email already been used", HttpStatus.BAD_REQUEST);
-        } else if (!(reEnterPassword.equals(tempUser.getPassword()))) {
+        } else if (userService.isPasswordMatch(registerRequest.password(), registerRequest.confirmPassword())) {
             return new ResponseEntity<>("Password doesn't match", HttpStatus.BAD_REQUEST);
-        } else{
-            User user= service.register(tempUser);
+        }
+        User user = userService.register(registerRequest);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
         }
     }
 
