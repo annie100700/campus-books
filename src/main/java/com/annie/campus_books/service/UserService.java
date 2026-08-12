@@ -1,6 +1,7 @@
 package com.annie.campus_books.service;
 
 import com.annie.campus_books.dto.request.UserInfoRequest;
+import com.annie.campus_books.dto.request.LoginRequest;
 import com.annie.campus_books.dto.request.RegisterRequest;
 import com.annie.campus_books.dto.request.UpdateUserRequest;
 import com.annie.campus_books.model.User;
@@ -62,12 +63,10 @@ public class UserService implements UserDetailsService {
         return repo.save(user);
     }
 
-    public boolean login(String account, String password) {
-        User user = repo.findById(account).orElse(null);
-        if (user != null) {
-            return passwordEncoder.matches(password, user.getPassword());
-        }
-        return false;
+    public boolean login(User user, LoginRequest loginRequest) {
+            return passwordEncoder.matches(user.getPassword(), loginRequest.password());
+    }
+
     }
 
     public void changePassword(User user, String newPassword) {
