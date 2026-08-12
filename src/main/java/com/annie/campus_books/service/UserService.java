@@ -1,6 +1,7 @@
 package com.annie.campus_books.service;
 
 import com.annie.campus_books.dto.request.UserInfoRequest;
+import com.annie.campus_books.dto.request.UpdateUserRequest;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,9 @@ public class UserService implements UserDetailsService {
         return repo.findById(userAccount).orElse(null);
     }
 
-    public User updateUserInfo(User user, UserInfoRequest userInfoRequest) {
-        user.setEmail(userInfoRequest.getEmail());
-        user.setAddress(userInfoRequest.getAddress());
+    public User updateUserByAccount(User user, UpdateUserRequest updateUserRequest) {
+        user.setEmail(updateUserRequest.email());
+        user.setAddress(updateUserRequest.address());
         return repo.save(user);
     }
 
