@@ -36,8 +36,8 @@ public class UserService implements UserDetailsService {
         return repo.save(user);
     }
 
-    public void deleteUserByAccount(String userAccount) {
-        repo.deleteById(userAccount);
+    public void deleteUser(User user) {
+    user.setDeleted(true);
     }
 
     public boolean accountBeenUsed(String userAccount) {
