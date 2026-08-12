@@ -24,7 +24,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService service;
+    private UserService userService;
 
     @Autowired
     private JwtService jwtService;
@@ -44,8 +44,10 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        User user = userService.getUserByAccount(loginRequest.account());
         boolean login;
         if (user != null) {
+            login = userService.login(user, loginRequest);
         } else {
             return new ResponseEntity<>("account doesn't exist", HttpStatus.NOT_FOUND);
         }
@@ -61,13 +63,12 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<List<User>> getAllUsers() {
-        return new ResponseEntity<>(service.getAllUsers(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/{userAccount}")
     public ResponseEntity<User> getUserByAccount(@PathVariable String userAccount) {
-        User user = service.getUserByAccount(userAccount);
-        if (user != null)
+        User user = userService.getUserByAccount(userAccount);
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
@@ -121,9 +122,9 @@ public class UserController {
 
     @DeleteMapping("/{account}")
     public ResponseEntity<String> deleteUserByAccount(@PathVariable String account) {
-        User user = service.getUserByAccount(account);
+        User user = userService.getUserByAccount(account);
         if (user != null) {
-            service.deleteUserByAccount(account);
+            userService.deleteUser(user);
             return new ResponseEntity<>("Deleted", HttpStatus.OK);
         } else
             return new ResponseEntity<>("Deleted user doesn't exist", HttpStatus.NOT_FOUND);
