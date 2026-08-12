@@ -67,6 +67,8 @@ public class UserService implements UserDetailsService {
             return passwordEncoder.matches(user.getPassword(), loginRequest.password());
     }
 
+    public boolean isPasswordMatch(String password, String confirmPassword) {
+        return passwordEncoder.matches(password, confirmPassword);
     }
 
     public void changePassword(User user, ChangePasswordRequest changePasswordRequest) {
