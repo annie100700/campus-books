@@ -76,6 +76,11 @@ public class UserController {
     @PutMapping("/{account}")
     public ResponseEntity<?> updateUserInfo(@PathVariable String account, @RequestBody UserInfoRequest userInfoRequest) {
         User user = service.getUserByAccount(account);
+    @GetMapping("/current-user")
+    public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal User user) {
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
         if (user != null) {
             User updatedUser= service.updateUserInfo(user, userInfoRequest);
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
