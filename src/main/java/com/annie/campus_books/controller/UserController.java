@@ -1,5 +1,6 @@
 package com.annie.campus_books.controller;
 
+import com.annie.campus_books.dto.request.ChangePasswordRequest;
 import com.annie.campus_books.dto.request.LoginRequest;
 import com.annie.campus_books.dto.request.UserInfoRequest;
 import com.annie.campus_books.dto.request.UpdateUserRequest;
@@ -98,14 +99,17 @@ public class UserController {
     }
 
     @PatchMapping("/{account}/password")
-    public ResponseEntity<String> changePassword(@PathVariable String account,
-                                                 @RequestPart String oldPassword, @RequestPart String newPassword) {
-        User user = service.getUserByAccount(account);
-        if (!(new BCryptPasswordEncoder().matches(oldPassword,user.getPassword()))) {
-            return new ResponseEntity<>("Password uncorrected", HttpStatus.BAD_REQUEST);
-        }else if(new BCryptPasswordEncoder().matches(oldPassword,newPassword))
-            return new ResponseEntity<>("Password could not be same", HttpStatus.BAD_REQUEST);
-        service.changePassword(user,newPassword);
+    public ResponseEntity<String> changePassword(@AuthenticationPrincipal User user,
+                                                 @RequestBody ChangePasswordRequest changePasswordRequest) {
+        if (userService.isPasswordMatch(user.getPassword(), changePasswordRequest.oldPassword())) {
+            return new ResponseEntity<>("Password incorrect", HttpStatus.BAD_REQUEST);
+        } else if (userService.isPasswordMatch(changePasswordRequest.newPassword(), changePasswordRequest.confirmNewPassword())) {
+            return new ResponseEntity<>("New password doesn't match", HttpStatus.BAD_REQUEST);
+        }
+        if(userService.isPasswordMatch(changePasswordRequest.oldPassword(),  changePasswordRequest.newPassword())) {
+            return new ResponseEntity<>("Password couldn't be same", HttpStatus.BAD_REQUEST);
+        }
+        userService.changePassword(user, changePasswordRequest);
         return new ResponseEntity<>("Password changed", HttpStatus.OK);
     }
 
