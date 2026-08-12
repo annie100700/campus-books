@@ -113,6 +113,12 @@ public class UserController {
         return new ResponseEntity<>("Password changed", HttpStatus.OK);
     }
 
+    @DeleteMapping("/current-user")
+    public ResponseEntity<String> deleteCurrentUser(@AuthenticationPrincipal User user) {
+        userService.deleteUser(user);
+        return new ResponseEntity<>("Deleted", HttpStatus.OK);
+    }
+
     @DeleteMapping("/{account}")
     public ResponseEntity<String> deleteUserByAccount(@PathVariable String account) {
         User user = service.getUserByAccount(account);
