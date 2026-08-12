@@ -1,6 +1,7 @@
 package com.annie.campus_books.service;
 
 import com.annie.campus_books.dto.request.UserInfoRequest;
+import com.annie.campus_books.dto.request.RegisterRequest;
 import com.annie.campus_books.dto.request.UpdateUserRequest;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.repository.UserRepo;
@@ -48,15 +49,16 @@ public class UserService implements UserDetailsService {
         return repo.existsById(email);
     }
 
-    public User register(User tempUser) {
-        String encodedPassword = passwordEncoder.encode(tempUser.getPassword());
+    public User register(RegisterRequest  registerRequest) {
+        String encodedPassword = passwordEncoder.encode(registerRequest.password());
         User user = new User();
-        user.setAccount(tempUser.getAccount());
+        user.setAccount(registerRequest.account());
         user.setPassword(encodedPassword);
-        user.setEmail(tempUser.getEmail());
+        user.setEmail(registerRequest.email());
+        if (registerRequest.address() != null){
+            user.setAddress(registerRequest.address());
+        }
         user.setRole(User.Role.USER);
-        if (tempUser.getAddress() != null)
-            user.setAddress(tempUser.getAddress());
         return repo.save(user);
     }
 
