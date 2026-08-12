@@ -66,7 +66,7 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
-    @GetMapping("/{userAccount}")
+    @GetMapping("/{account}")
     public ResponseEntity<User> getUserByAccount(@PathVariable String userAccount) {
         User user = userService.getUserByAccount(userAccount);
         if (user != null) {
@@ -99,7 +99,7 @@ public class UserController {
         return new ResponseEntity<>("updated user doesn't exist", HttpStatus.BAD_REQUEST);
     }
 
-    @PatchMapping("/{account}/password")
+    @PatchMapping("/currrnt-user/password")
     public ResponseEntity<String> changePassword(@AuthenticationPrincipal User user,
                                                  @RequestBody ChangePasswordRequest changePasswordRequest) {
         if (userService.isPasswordMatch(user.getPassword(), changePasswordRequest.oldPassword())) {
