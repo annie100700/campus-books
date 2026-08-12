@@ -6,6 +6,7 @@ import com.annie.campus_books.dto.response.LoginResponse;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.service.JwtService;
 import com.annie.campus_books.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -38,8 +40,23 @@ public class UserController {
         User user = userService.register(registerRequest);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        boolean login;
+        if (user != null) {
+        } else {
+            return new ResponseEntity<>("account doesn't exist", HttpStatus.NOT_FOUND);
         }
+        if (login) {
+            String jwt = jwtService.generateLoginAccessToken(user);
+            Date expiration = jwtService.parseToken(jwt).getExpiration();
+            return new ResponseEntity<>(LoginResponse.getResponseOf(user, jwt, expiration), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Incorrect password", HttpStatus.UNAUTHORIZED);
     }
+
+    //logout
 
     @GetMapping("/")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -87,17 +104,6 @@ public class UserController {
             return new ResponseEntity<>("Deleted", HttpStatus.OK);
         } else
             return new ResponseEntity<>("Deleted user doesn't exist", HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        User user = service.getUserByAccount(loginRequest.getAccount());
-        boolean login = service.login(loginRequest.getAccount(), loginRequest.getPassword());
-        if (login) {
-            String jwt = jwtService.generateLoginAccessToken(user);
-            return new ResponseEntity<>(LoginResponse.of(jwt, user), HttpStatus.OK);
-        }
-        throw  new BadCredentialsException("Invalid username or password");
     }
 
 }
