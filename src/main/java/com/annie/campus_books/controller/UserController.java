@@ -2,6 +2,7 @@ package com.annie.campus_books.controller;
 
 import com.annie.campus_books.dto.request.LoginRequest;
 import com.annie.campus_books.dto.request.UserInfoRequest;
+import com.annie.campus_books.dto.request.UpdateUserRequest;
 import com.annie.campus_books.dto.response.LoginResponse;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.service.JwtService;
@@ -10,8 +11,7 @@ import com.annie.campus_books.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -73,21 +73,28 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/{account}")
-    public ResponseEntity<?> updateUserInfo(@PathVariable String account, @RequestBody UserInfoRequest userInfoRequest) {
-        User user = service.getUserByAccount(account);
     @GetMapping("/current-user")
     public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @PatchMapping("/current-user")
+    public ResponseEntity<?> updateCurrentUser(@AuthenticationPrincipal User user,
+                                               @RequestBody UpdateUserRequest updateUserRequest) {
+        User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    //admin用
+    @PatchMapping("/{account}")
+    public ResponseEntity<?> updateUserByAccount(@PathVariable String account,
+                                                 @RequestBody UpdateUserRequest updateUserRequest) {
+        User user = userService.getUserByAccount(account);
         if (user != null) {
-            User updatedUser= service.updateUserInfo(user, userInfoRequest);
+            User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         }
-
-        return new ResponseEntity<>("Updated user doesn't exist", HttpStatus.BAD_REQUEST);
-
+        return new ResponseEntity<>("updated user doesn't exist", HttpStatus.BAD_REQUEST);
     }
 
     @PatchMapping("/{account}/password")
