@@ -120,14 +120,15 @@ public class UserController {
         return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
 
+    //admin用
     @DeleteMapping("/{account}")
     public ResponseEntity<String> deleteUserByAccount(@PathVariable String account) {
         User user = userService.getUserByAccount(account);
         if (user != null) {
             userService.deleteUser(user);
             return new ResponseEntity<>("Deleted", HttpStatus.OK);
-        } else
-            return new ResponseEntity<>("Deleted user doesn't exist", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>("Deleted user doesn't exist", HttpStatus.NOT_FOUND);
     }
 
 }
