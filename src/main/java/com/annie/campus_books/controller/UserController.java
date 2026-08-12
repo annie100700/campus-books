@@ -67,9 +67,10 @@ public class UserController {
     public ResponseEntity<User> getUserByAccount(@PathVariable String userAccount) {
         User user = service.getUserByAccount(userAccount);
         if (user != null)
+        if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/{account}")
