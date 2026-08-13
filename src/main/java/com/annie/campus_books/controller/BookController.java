@@ -44,10 +44,10 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @GetMapping("/{bookId}")
-    public ResponseEntity<Book> getBookById(@PathVariable int bookId) {
-        Book book= bookService.getBookById(bookId);
-        if(book!=null)
+    @GetMapping("/{id}")
+    public ResponseEntity<Book> getBookById(@PathVariable int id) {
+        Book book = bookService.getBookById(id);
+        if (book != null)
             return new ResponseEntity<>(book, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
