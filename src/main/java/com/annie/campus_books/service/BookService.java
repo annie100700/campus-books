@@ -1,7 +1,7 @@
 package com.annie.campus_books.service;
 
-import com.annie.campus_books.dto.request.BookInfoRequest;
 import com.annie.campus_books.dto.request.AddBookRequest;
+import com.annie.campus_books.dto.request.UpdateBookRequest;
 import com.annie.campus_books.model.Book;
 import com.annie.campus_books.model.BookCondition;
 import com.annie.campus_books.model.User;
@@ -61,22 +61,61 @@ public class BookService {
         return bookCondition;
     }
 
-
-    public void updateBook(Book book, BookInfoRequest bookInfoRequest,
+    public Book updateBook(Book book, UpdateBookRequest updateBookRequest,
                            MultipartFile imageFile) throws IOException {
-        book.setName(bookInfoRequest.getName());
-        book.setAuthor(bookInfoRequest.getAuthor());
-        book.setPublisher(bookInfoRequest.getPublisher());
-        book.setBookCondition(bookInfoRequest.getBookCondition());
-        book.setListPrice(bookInfoRequest.getListPrice());
-        book.setSellingPrice(bookInfoRequest.getSellingPrice());
+        if(updateBookRequest.name()!=null){
+            book.setName(updateBookRequest.name());
+        }
+        if (updateBookRequest.author()!=null){
+            book.setAuthor(updateBookRequest.author());
+        }
+        if (updateBookRequest.publisher()!=null){
+            book.setPublisher(updateBookRequest.publisher());
+        }
 
-        if(imageFile!=null&& !imageFile.isEmpty()){
-            book.setImageData(imageFile.getBytes());
+        BookCondition bookCondition = updateBookCondition(book, updateBookRequest);
+        book.setBookCondition(bookCondition);
+
+        if (updateBookRequest.listPrice()!=null){
+            book.setListPrice(updateBookRequest.listPrice());
+        }
+        if (updateBookRequest.sellingPrice()!=null){
+            book.setSellingPrice(updateBookRequest.sellingPrice());
+        }
+
+        if(imageFile!=null&&imageFile.isEmpty()){
             book.setImageName(imageFile.getOriginalFilename());
             book.setImageType(imageFile.getContentType());
+            book.setImageData(imageFile.getBytes());
         }
         repo.save(book);
+        return book;
+    }
+
+    private BookCondition updateBookCondition(Book book, UpdateBookRequest updateBookRequest) {
+        BookCondition bookCondition = book.getBookCondition();
+        if(updateBookRequest.highlight()!=null){
+            bookCondition.setHighlight(updateBookRequest.highlight());
+        }
+        if(updateBookRequest.notes()!=null){
+            bookCondition.setNotes(updateBookRequest.notes());
+        }
+        if(updateBookRequest.stain()!=null){
+            bookCondition.setStain(updateBookRequest.stain());
+        }
+        if(updateBookRequest.frontCoverMissing()!=null){
+            bookCondition.setFrontCoverMissing(updateBookRequest.frontCoverMissing());
+        }
+        if(updateBookRequest.backCoverMissing()!=null){
+            bookCondition.setBackCoverMissing(updateBookRequest.backCoverMissing());
+        }
+        if(updateBookRequest.splitVolume()!=null){
+            bookCondition.setSplitVolume(updateBookRequest.splitVolume());
+        }
+        if (updateBookRequest.other()!=null){
+            bookCondition.setOther(updateBookRequest.other());
+        }
+        return bookCondition;
     }
 
     public void deleteBookById(int bookId) {
