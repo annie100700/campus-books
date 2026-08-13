@@ -1,6 +1,7 @@
 package com.annie.campus_books.controller;
 
 import com.annie.campus_books.dto.request.BookInfoRequest;
+import com.annie.campus_books.dto.request.AddBookRequest;
 import com.annie.campus_books.model.Book;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.service.BookService;
@@ -8,6 +9,7 @@ import com.annie.campus_books.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,14 +28,13 @@ public class BookController {
     private UserService userService;
 
     @PostMapping("/")
-    public ResponseEntity<?> addBook(@RequestPart Book book,@RequestPart MultipartFile imageFile,
-                                     @RequestPart String sellerAccount) {
+    public ResponseEntity<?> addBook(@AuthenticationPrincipal User user,
+                                     @RequestPart AddBookRequest addBookRequest, @RequestPart MultipartFile imageFile) {
         try {
-            User seller=userService.getUserByAccount(sellerAccount);
-            Book addedBook = bookService.addBook(book,imageFile,seller);
-            return  new ResponseEntity<>(addedBook, HttpStatus.CREATED);
+            Book book = bookService.addBook(addBookRequest, imageFile, user);
+            return new ResponseEntity<>(book, HttpStatus.OK);
         } catch (Exception e) {
-            return  new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
