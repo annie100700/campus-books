@@ -93,14 +93,19 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{bookId}")
-    public ResponseEntity<String> deleteBookById(@PathVariable int bookId) {
-        Book book= bookService.getBookById(bookId);
-        if(book!=null) {
-            bookService.deleteBookById(bookId);
-            return new ResponseEntity<>("Deleted", HttpStatus.OK);
-        }else
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteBookById(@AuthenticationPrincipal User user, @PathVariable int id) {
+        Book book = bookService.getBookById(id);
+        if (book != null) {
+            if (user.equals(book.getSeller()) || user.getRole().equals(User.Role.ADMIN)) {
+                bookService.deleteBook(book);
+                return new ResponseEntity<>("deleted", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        } else {
             return new ResponseEntity<>("Deleted book doesn't exist", HttpStatus.NOT_FOUND);
+        }
     }
 
 }
