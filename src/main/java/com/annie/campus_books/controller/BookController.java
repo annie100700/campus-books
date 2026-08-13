@@ -1,12 +1,11 @@
 package com.annie.campus_books.controller;
 
-import com.annie.campus_books.dto.request.BookInfoRequest;
 import com.annie.campus_books.dto.request.AddBookRequest;
 import com.annie.campus_books.dto.request.UpdateBookRequest;
 import com.annie.campus_books.model.Book;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.service.BookService;
-import com.annie.campus_books.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +23,6 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
-
-    @Autowired
-    private UserService userService;
 
     @PostMapping("/")
     public ResponseEntity<?> addBook(@AuthenticationPrincipal User user,
