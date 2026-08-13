@@ -2,6 +2,7 @@ package com.annie.campus_books.controller;
 
 import com.annie.campus_books.dto.request.BookInfoRequest;
 import com.annie.campus_books.dto.request.AddBookRequest;
+import com.annie.campus_books.dto.request.UpdateBookRequest;
 import com.annie.campus_books.model.Book;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.service.BookService;
@@ -65,20 +66,25 @@ public class BookController {
 
     }
 
-    @PutMapping("/{bookId}")
-    public ResponseEntity<String> updateBook(@PathVariable int bookId,
-                                             @RequestPart BookInfoRequest bookInfoRequest,
-                                             @RequestPart MultipartFile imageFile) {
-        Book book= bookService.getBookById(bookId);
-        if(book!=null){
-        try {
-            bookService.updateBook(book,bookInfoRequest,imageFile);
-        } catch (IOException e) {
-            return new ResponseEntity<>("Failed to update",HttpStatus.BAD_REQUEST);
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateBook(@AuthenticationPrincipal User user, @PathVariable int id,
+                                        @RequestPart UpdateBookRequest updateBookRequest,
+                                        @RequestPart(required = false) MultipartFile imageFile) {
+        Book book = bookService.getBookById(id);
+        if (book != null) {
+            if (user.equals(book.getSeller()) || user.getRole().equals(User.Role.ADMIN)) {
+                try {
+                    Book updatedBook = bookService.updateBook(book, updateBookRequest, imageFile);
+                    return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+                } catch (IOException e) {
+                    return new ResponseEntity<>("Failed to update", HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        } else {
+            return new ResponseEntity<>("updated book not found", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>("Updated", HttpStatus.OK);
-        }
-        return new ResponseEntity<>("updated book not found",HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/search")
