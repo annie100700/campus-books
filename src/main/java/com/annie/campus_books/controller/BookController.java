@@ -53,14 +53,16 @@ public class BookController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/{bookId}/image")
-    public ResponseEntity<byte[]> getBookImageById(@PathVariable int bookId) {
-        Book book= bookService.getBookById(bookId);
-        if(book!=null){
-            byte[] imageFile=book.getImageData();
-            return ResponseEntity.ok().body(imageFile);
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getBookImageById(@PathVariable int id) {
+        Book book = bookService.getBookById(id);
+        if (book != null) {
+            byte[] imageFile = book.getImageData();
+            return new ResponseEntity<>(imageFile, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     }
 
     @PutMapping("/{bookId}")
