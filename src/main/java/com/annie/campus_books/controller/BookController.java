@@ -60,6 +60,10 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Book>> searchBooks(@RequestParam String keyword) {
+        List<Book> books = bookService.searchBooks(keyword);
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
@@ -81,12 +85,6 @@ public class BookController {
         } else {
             return new ResponseEntity<>("updated book not found", HttpStatus.NOT_FOUND);
         }
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<List<Book>> searchBooks(@RequestParam String keyword) {
-        List<Book> books= bookService.searchBooks(keyword);
-        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
