@@ -1,7 +1,9 @@
 package com.annie.campus_books.service;
 
 import com.annie.campus_books.dto.request.BookInfoRequest;
+import com.annie.campus_books.dto.request.AddBookRequest;
 import com.annie.campus_books.model.Book;
+import com.annie.campus_books.model.BookCondition;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.repository.BookRepo;
 import lombok.extern.log4j.Log4j2;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -29,18 +30,35 @@ public class BookService {
         return repo.findById(bookId).orElse(null);
     }
 
-    public Book addBook(Book book, MultipartFile imageFile, User seller) throws IOException {
+    public Book addBook(AddBookRequest addBookRequest, MultipartFile imageFile, User seller) throws IOException {
+        Book book = new Book();
+        book.setName(addBookRequest.name());
+        book.setAuthor(addBookRequest.author());
+        book.setPublisher(addBookRequest.publisher());
+
+        BookCondition bookCondition = getBookCondition(addBookRequest);
+        book.setBookCondition(bookCondition);
+
         book.setSeller(seller);
-
-        List<Book.Status> status = new ArrayList<>();
-        status.add(Book.Status.FOR_SALE);
-        book.setStatus(status);
-
+        book.setListPrice(addBookRequest.listPrice());
+        book.setSellingPrice(addBookRequest.sellingPrice());
+        book.setStatus(Book.Status.FOR_SALE);
         book.setImageName(imageFile.getOriginalFilename());
         book.setImageType(imageFile.getContentType());
         book.setImageData(imageFile.getBytes());
         return repo.save(book);
+    }
 
+    private BookCondition getBookCondition(AddBookRequest addBookRequest) {
+        BookCondition bookCondition = new BookCondition();
+        bookCondition.setHighlight(addBookRequest.highlight());
+        bookCondition.setNotes(addBookRequest.notes());
+        bookCondition.setStain(addBookRequest.stain());
+        bookCondition.setFrontCoverMissing(addBookRequest.frontCoverMissing());
+        bookCondition.setBackCoverMissing(addBookRequest.backCoverMissing());
+        bookCondition.setSplitVolume(addBookRequest.splitVolume());
+        bookCondition.setOther(addBookRequest.other());
+        return bookCondition;
     }
 
 
