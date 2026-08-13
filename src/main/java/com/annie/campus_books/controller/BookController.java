@@ -40,7 +40,8 @@ public class BookController {
 
     @GetMapping("/")
     public ResponseEntity<List<Book>> getAllBooks() {
-        return new ResponseEntity<>(bookService.getAllBooks(),HttpStatus.OK);
+        List<Book> books = bookService.getAllBooks();
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
     @GetMapping("/{bookId}")
