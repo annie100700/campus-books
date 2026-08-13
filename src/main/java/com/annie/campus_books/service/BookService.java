@@ -118,8 +118,9 @@ public class BookService {
         return bookCondition;
     }
 
-    public void deleteBookById(int bookId) {
-        repo.deleteById(bookId);
+    public void deleteBook(Book book) {
+        book.setStatus(Book.Status.REMOVED);
+        repo.save(book);
     }
 
     public List<Book> searchBooks(String keyword) {
