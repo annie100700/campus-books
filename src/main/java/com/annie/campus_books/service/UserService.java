@@ -33,8 +33,12 @@ public class UserService implements UserDetailsService {
     }
 
     public User updateUserByAccount(User user, UpdateUserRequest updateUserRequest) {
-        user.setEmail(updateUserRequest.email());
-        user.setAddress(updateUserRequest.address());
+        if(updateUserRequest.email()!=null){
+            user.setEmail(updateUserRequest.email());
+        }
+        if(updateUserRequest.address()!=null){
+            user.setAddress(updateUserRequest.address());
+        }
         return repo.save(user);
     }
 
