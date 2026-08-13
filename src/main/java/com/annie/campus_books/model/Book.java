@@ -2,12 +2,7 @@ package com.annie.campus_books.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,11 +29,13 @@ public class Book {
     private BigDecimal listPrice;
     private BigDecimal sellingPrice;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    private List<Status> status=new ArrayList<>();
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Status status;
     public enum Status {
         FOR_SALE,
-        SOLD_OUT
+        SOLD_OUT,
+        REMOVED
     }
 
     private String imageName;
