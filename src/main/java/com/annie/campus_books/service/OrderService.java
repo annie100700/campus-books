@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +23,8 @@ public class OrderService {
     private BookRepo bookRepo;
 
     @Transactional
-    public UserOrder createOrder(UserOrder order, Book book, User buyer) {
+    public UserOrder createOrder(Book book, User buyer) {
+        UserOrder order = new UserOrder();
         order.setBook(book);
         order.setBookName(book.getName());
         order.setPrice(book.getSellingPrice());
@@ -33,13 +33,9 @@ public class OrderService {
         order.setBuyer(buyer);
 
         order.setCreatedDate(LocalDateTime.now());
-        List<UserOrder.Status> orderStatus = new ArrayList<>();
-        orderStatus.add(UserOrder.Status.IN_PROGRESS);
-        order.setStatus(orderStatus);
+        order.setStatus(UserOrder.Status.IN_PROGRESS);
 
-        List<Book.Status> bookStatus = new ArrayList<>();
-        bookStatus.add(Book.Status.SOLD_OUT);
-        book.setStatus(bookStatus);
+        book.setStatus(Book.Status.SOLD_OUT);
         bookRepo.save(book);
         return orderRepo.save(order);
     }
