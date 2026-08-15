@@ -17,6 +17,11 @@ public interface BookRepo extends JpaRepository<Book, Integer> {
     List<Book> findAllByUser(String account);
 
     @Query("SELECT b FROM Book b WHERE "
+            + "b.seller.account=:account AND "
+            + "b.status=:status")
+    List<Book> findAllByUserAndStatus(String account, Book.Status status);
+
+    @Query("SELECT b FROM Book b WHERE "
             +"LOWER(b.name) LIKE LOWER(CONCAT('%',:keyword,'%')) OR "
             +"LOWER(b.author) LIKE LOWER(CONCAT('%',:keyword,'%')) OR "
             +"LOWER(b.publisher) LIKE LOWER(CONCAT('%',:keyword,'%'))")
