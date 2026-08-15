@@ -66,6 +66,10 @@ public class BookService {
         return repo.findAllByUser(account);
     }
 
+    public List<Book> getBooksByUserAndStatus(String account, Book.Status status) {
+        return repo.findAllByUserAndStatus(account,status);
+    }
+
     public List<Book> searchBooks(String keyword) {
         return repo.searchBooks(keyword);
     }
