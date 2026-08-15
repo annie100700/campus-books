@@ -64,17 +64,14 @@ public class OrderService {
     }
 
     @Transactional
-    public void cancelOrder(UserOrder order,Book book) {
-        List<UserOrder.Status> orderStatus=new ArrayList<>();
-        orderStatus.add(UserOrder.Status.CANCELED);
-        order.setStatus(orderStatus);
+    public void cancelOrder(UserOrder order) {
+        order.setStatus(UserOrder.Status.CANCELED);
+
+        Book book=order.getBook();
+        book.setStatus(Book.Status.FOR_SALE);
+
         orderRepo.save(order);
-
-        List<Book.Status> bookStatus=new ArrayList<>();
-        bookStatus.add(Book.Status.FOR_SALE);
-        book.setStatus(bookStatus);
         bookRepo.save(book);
-
     }
 
     public void deleteOrderById(UUID orderId) {
