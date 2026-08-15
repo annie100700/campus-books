@@ -53,6 +53,10 @@ public class OrderService {
     }
 
     public List<UserOrder> getUserSales(String account) {
+    public List<UserOrder> getPurchasesByUserAndStatus(String account, UserOrder.Status status) {
+        return orderRepo.findAllByBuyerAndStatus(account,status);
+    }
+
         return orderRepo.findAllBySeller(account);
     }
 
