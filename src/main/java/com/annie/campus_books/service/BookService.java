@@ -23,15 +23,6 @@ public class BookService {
     @Autowired
     private BookRepo repo;
 
-
-    public List<Book> getAllBooks() {
-        return repo.findAll();
-    }
-
-    public Book getBookById(int bookId) {
-        return repo.findById(bookId).orElse(null);
-    }
-
     public Book addBook(AddBookRequest addBookRequest, MultipartFile imageFile, User seller) throws IOException {
         Book book = new Book();
         book.setName(addBookRequest.name());
@@ -61,6 +52,18 @@ public class BookService {
         bookCondition.setSplitVolume(addBookRequest.splitVolume());
         bookCondition.setOther(addBookRequest.other());
         return bookCondition;
+    }
+
+    public List<Book> getAllBooks() {
+        return repo.findAll();
+    }
+
+    public Book getBookById(int id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    public List<Book> searchBooks(String keyword) {
+        return repo.searchBooks(keyword);
     }
 
     public Book updateBook(Book book, UpdateBookRequest updateBookRequest,
@@ -125,7 +128,4 @@ public class BookService {
         repo.save(book);
     }
 
-    public List<Book> searchBooks(String keyword) {
-        return repo.searchBooks(keyword);
-    }
 }
