@@ -60,6 +60,10 @@ public class OrderService {
         return orderRepo.findAllBySeller(account);
     }
 
+    public List<UserOrder> getSellsByUserAndStatus(String account, UserOrder.Status status) {
+        return orderRepo.findAllBySellerAndStatus(account,status);
+    }
+
     public void completeOrder(UserOrder order) {
         order.setStatus(UserOrder.Status.COMPLETED);
         orderRepo.save(order);
