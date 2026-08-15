@@ -24,4 +24,9 @@ public interface OrderRepo extends JpaRepository<UserOrder, UUID> {
 
     List<UserOrder> findAllBySeller(String account);
 
+    @Query("SELECT o FROM UserOrder o WHERE "
+            + "o.seller.account=:account AND "
+            + "o.status=:status")
+    List<UserOrder> findAllBySellerAndStatus(String account, UserOrder.Status status);
+
 }
