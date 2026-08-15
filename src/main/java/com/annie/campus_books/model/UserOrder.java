@@ -3,6 +3,7 @@ package com.annie.campus_books.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -10,9 +11,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
-//@Setter
-//@Getter
 @Data
 @Entity
 public class UserOrder {
