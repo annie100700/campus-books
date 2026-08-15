@@ -8,8 +8,6 @@ import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 
@@ -42,7 +40,7 @@ public class UserOrder {
     private LocalDateTime createdDate;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    private List<Status> status=new ArrayList<>();
+    private Status status;
     public enum Status {
         IN_PROGRESS,
         COMPLETED,
