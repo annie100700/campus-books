@@ -15,13 +15,13 @@ public interface OrderRepo extends JpaRepository<UserOrder, UUID> {
             "WHERE o.buyer.account=:account")
     List<UserOrder> findAllByBuyer(String account);
 
-    @Query("SELECT o FROM UserOrder o " +
-            "WHERE o.seller.account=:account")
     @Query("SELECT o FROM UserOrder o WHERE "
             + "o.buyer.account=:account AND "
             + "o.status=:status")
     List<UserOrder> findAllByBuyerAndStatus(String account, UserOrder.Status status);
 
+    @Query("SELECT o FROM UserOrder o WHERE "
+            + "o.seller.account=:account")
     List<UserOrder> findAllBySeller(String account);
 
     @Query("SELECT o FROM UserOrder o WHERE "
