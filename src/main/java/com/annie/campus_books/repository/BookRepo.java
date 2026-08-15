@@ -22,9 +22,9 @@ public interface BookRepo extends JpaRepository<Book, Integer> {
     List<Book> findAllByUserAndStatus(String account, Book.Status status);
 
     @Query("SELECT b FROM Book b WHERE "
-            +"LOWER(b.name) LIKE LOWER(CONCAT('%',:keyword,'%')) OR "
-            +"LOWER(b.author) LIKE LOWER(CONCAT('%',:keyword,'%')) OR "
-            +"LOWER(b.publisher) LIKE LOWER(CONCAT('%',:keyword,'%'))")
+            + "LOWER(b.name) LIKE LOWER(CONCAT('%',:keyword,'%')) OR "
+            + "LOWER(b.author) LIKE LOWER(CONCAT('%',:keyword,'%')) OR "
+            + "LOWER(b.publisher) LIKE LOWER(CONCAT('%',:keyword,'%'))")
     List<Book> searchBooks(String keyword);
 
     @SuppressWarnings("NullableProblems")
@@ -33,6 +33,5 @@ public interface BookRepo extends JpaRepository<Book, Integer> {
 
     @EntityGraph(attributePaths = "bookCondition")
     Optional<Book> findById(int bookId);
-
 
 }
