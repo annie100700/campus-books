@@ -48,7 +48,7 @@ public class OrderService {
         return orderRepo.findById(orderId).orElse(null);
     }
 
-    public List<UserOrder> getUserPurchases(String account) {
+    public List<UserOrder> getPurchasesByUser(String account) {
         return orderRepo.findAllByBuyer(account);
     }
 
