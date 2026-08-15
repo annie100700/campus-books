@@ -52,11 +52,11 @@ public class OrderService {
         return orderRepo.findAllByBuyer(account);
     }
 
-    public List<UserOrder> getUserSales(String account) {
     public List<UserOrder> getPurchasesByUserAndStatus(String account, UserOrder.Status status) {
         return orderRepo.findAllByBuyerAndStatus(account,status);
     }
 
+    public List<UserOrder> getSellsByUser(String account) {
         return orderRepo.findAllBySeller(account);
     }
 
