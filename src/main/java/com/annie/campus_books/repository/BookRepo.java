@@ -13,6 +13,10 @@ import java.util.Optional;
 public interface BookRepo extends JpaRepository<Book, Integer> {
 
     @Query("SELECT b FROM Book b WHERE "
+            + "b.seller.account=:account")
+    List<Book> findAllByUser(String account);
+
+    @Query("SELECT b FROM Book b WHERE "
             +"LOWER(b.name) LIKE LOWER(CONCAT('%',:keyword,'%')) OR "
             +"LOWER(b.author) LIKE LOWER(CONCAT('%',:keyword,'%')) OR "
             +"LOWER(b.publisher) LIKE LOWER(CONCAT('%',:keyword,'%'))")
