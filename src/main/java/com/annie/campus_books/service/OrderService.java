@@ -57,9 +57,7 @@ public class OrderService {
     }
 
     public void completeOrder(UserOrder order) {
-        List<UserOrder.Status> status=new ArrayList<>();
-        status.add(UserOrder.Status.COMPLETED);
-        order.setStatus(status);
+        order.setStatus(UserOrder.Status.COMPLETED);
         orderRepo.save(order);
     }
 
