@@ -5,7 +5,9 @@ import com.annie.campus_books.dto.request.LoginRequest;
 import com.annie.campus_books.dto.request.RegisterRequest;
 import com.annie.campus_books.dto.request.UpdateUserRequest;
 import com.annie.campus_books.dto.response.LoginResponse;
+import com.annie.campus_books.model.Book;
 import com.annie.campus_books.model.User;
+import com.annie.campus_books.service.BookService;
 import com.annie.campus_books.service.JwtService;
 import com.annie.campus_books.service.UserService;
 
@@ -28,6 +30,9 @@ public class UserController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private BookService bookService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
@@ -81,6 +86,16 @@ public class UserController {
     }
 
     @PatchMapping("/current-user")
+    @GetMapping("/current/books")
+    public ResponseEntity<?> getBooksOfCurrentUser(@AuthenticationPrincipal User user) {
+        String account = user.getAccount();
+        List<Book> books=bookService.getBooksByUser(account);
+        if(books.isEmpty()){
+            return new ResponseEntity<>("You don't have any book yet",HttpStatus.OK);
+        }
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
     public ResponseEntity<?> updateCurrentUser(@AuthenticationPrincipal User user,
                                                @RequestBody UpdateUserRequest updateUserRequest) {
         User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
