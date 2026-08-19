@@ -57,12 +57,12 @@ public class OrderController {
         return new ResponseEntity<>(order,HttpStatus.OK);
     }
 
-    @PatchMapping("/{orderId}/complete")
-    public ResponseEntity<String> completeOrderById(@PathVariable UUID orderId) {
-        UserOrder order= orderService.getOrderById(orderId);
+    @PatchMapping("/{id}/status/complete")
+    public ResponseEntity<String> completeOrderById(@PathVariable UUID id) {
+        UserOrder order= orderService.getOrderById(id);
         if (order!=null){
             orderService.completeOrder(order);
-            return new ResponseEntity<>("Order completed successfully",HttpStatus.OK);
+            return new ResponseEntity<>("Completed",HttpStatus.OK);
         }
         return new ResponseEntity<>("Order not found",HttpStatus.NOT_FOUND);
     }
