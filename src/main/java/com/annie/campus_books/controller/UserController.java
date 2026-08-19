@@ -232,7 +232,7 @@ public class UserController {
         return new ResponseEntity<>("updated user doesn't exist", HttpStatus.BAD_REQUEST);
     }
 
-    @PatchMapping("/currrnt-user/password")
+    @PatchMapping("/currrnt/password")
     public ResponseEntity<String> changePassword(@AuthenticationPrincipal User user,
                                                  @RequestBody ChangePasswordRequest changePasswordRequest) {
         if (userService.isPasswordMatch(user.getPassword(), changePasswordRequest.oldPassword())) {
@@ -247,7 +247,7 @@ public class UserController {
         return new ResponseEntity<>("Password changed", HttpStatus.OK);
     }
 
-    @DeleteMapping("/current-user")
+    @DeleteMapping("/current")
     public ResponseEntity<String> deleteCurrentUser(@AuthenticationPrincipal User user) {
         userService.deleteUser(user);
         return new ResponseEntity<>("Deleted", HttpStatus.OK);
