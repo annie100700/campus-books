@@ -41,16 +41,10 @@ public class OrderController {
 
     @GetMapping("/")
     public ResponseEntity<List<UserOrder>> getAllOrders() {
-    @GetMapping("/{account}/purchases")
-    public ResponseEntity<List<UserOrder>> getUserPurchases(@PathVariable String account) {
-        return new ResponseEntity<>(orderService.getUserPurchases(account),HttpStatus.OK);
         List<UserOrder> orders=orderService.getAllOrders();
         return new ResponseEntity<>(orders,HttpStatus.OK);
     }
 
-    @GetMapping("/{account}/sales")
-    public ResponseEntity<List<UserOrder>> getUserSales(@PathVariable String account) {
-        return new ResponseEntity<>(orderService.getUserSales(account),HttpStatus.OK);
     @GetMapping("/{id}")
     public ResponseEntity<UserOrder> getOrderById(@PathVariable UUID id) {
         UserOrder order=orderService.getOrderById(id);
