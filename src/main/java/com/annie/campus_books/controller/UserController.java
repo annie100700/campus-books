@@ -163,6 +163,17 @@ public class UserController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+    @GetMapping("/current/orders/sell/{status}")
+    public ResponseEntity<?> getSellsOfCurrentUserByStatus(@AuthenticationPrincipal User user,
+                                                           @PathVariable UserOrder.Status status) {
+        String account = user.getAccount();
+        List<UserOrder> orders=orderService.getSellsByUserAndStatus(account,status);
+        if (orders.isEmpty()){
+            return new ResponseEntity<>("There's no matching orders",HttpStatus.OK);
+        }
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
     public ResponseEntity<?> updateCurrentUser(@AuthenticationPrincipal User user,
                                                @RequestBody UpdateUserRequest updateUserRequest) {
         User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
