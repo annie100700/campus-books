@@ -77,12 +77,12 @@ public class OrderController {
         return new ResponseEntity<>("Order not found",HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/{orderId}")
-    public ResponseEntity<String> deleteOrderById(@PathVariable UUID orderId) {
-        UserOrder order = orderService.getOrderById(orderId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteOrderById(@PathVariable UUID id) {
+        UserOrder order = orderService.getOrderById(id);
         if(order!=null){
-            orderService.deleteOrderById(orderId);
-            return new ResponseEntity<>("Order deleted successfully",HttpStatus.OK);
+            orderService.deleteOrderById(id);
+            return new ResponseEntity<>("Deleted",HttpStatus.OK);
         }
         return new ResponseEntity<>("Order not found",HttpStatus.NOT_FOUND);
     }
