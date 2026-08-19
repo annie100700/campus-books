@@ -117,6 +117,16 @@ public class UserController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
+    //admin用
+    @GetMapping("/{account}/books/{status}")
+    public ResponseEntity<?> getBooksByUserAndStatus(@PathVariable String user, @PathVariable Book.Status status) {
+        List<Book> books=bookService.getBooksByUserAndStatus(user,status);
+        if (books.isEmpty()){
+            return new ResponseEntity<>("There's no matching books",HttpStatus.OK);
+        }
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
     public ResponseEntity<?> updateCurrentUser(@AuthenticationPrincipal User user,
                                                @RequestBody UpdateUserRequest updateUserRequest) {
         User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
