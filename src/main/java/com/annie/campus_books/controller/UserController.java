@@ -174,6 +174,16 @@ public class UserController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+    //admin用
+    @GetMapping("/{account}/orders/purchase")
+    public ResponseEntity<?> getPurchasesByUser(@PathVariable String account) {
+        List<UserOrder> orders=orderService.getPurchasesByUser(account);
+        if (orders.isEmpty()){
+            return new ResponseEntity<>("This user have not buy anything yet",HttpStatus.OK);
+        }
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
     public ResponseEntity<?> updateCurrentUser(@AuthenticationPrincipal User user,
                                                @RequestBody UpdateUserRequest updateUserRequest) {
         User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
