@@ -1,19 +1,18 @@
 package com.annie.campus_books.controller;
 
-import com.annie.campus_books.dto.request.OrderRequest;
 import com.annie.campus_books.model.Book;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.model.UserOrder;
 import com.annie.campus_books.service.BookService;
 import com.annie.campus_books.service.OrderService;
-import com.annie.campus_books.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @CrossOrigin
@@ -27,22 +26,17 @@ public class OrderController {
     @Autowired
     private BookService bookService;
 
-    @Autowired
-    private UserService userService;
-
     @PostMapping("/")
-    public ResponseEntity<?> createOrder(@RequestPart UserOrder tempOrder,
-                                         @RequestPart OrderRequest orderRequest) {
-        Book book = bookService.getBookById(orderRequest.getBookId());
-        User buyer=userService.getUserByAccount(orderRequest.getBuyerAccount());
-        if(Objects.equals(buyer.getAccount(), book.getSeller().getAccount())){
+    public ResponseEntity<?> createOrder(@AuthenticationPrincipal User buyer,@RequestPart Integer id) {
+        Book book = bookService.getBookById(id);
+        String sellerAccount=book.getSeller().getAccount();
+        if(buyer.getAccount().equals(sellerAccount)){
             return new ResponseEntity<>("Can not buy your own book",HttpStatus.BAD_REQUEST);
-        } else if (book.getStatus().contains(Book.Status.SOLD_OUT)) {
+        } else if (book.getStatus().equals(Book.Status.SOLD_OUT)) {
             return  new ResponseEntity<>("This book already sold out",HttpStatus.BAD_REQUEST);
-        }else{
-            UserOrder userOrder= orderService.createOrder(tempOrder,book,buyer);
-            return new ResponseEntity<>(userOrder, HttpStatus.CREATED);
         }
+            UserOrder userOrder= orderService.createOrder(book,buyer);
+            return new ResponseEntity<>(userOrder, HttpStatus.CREATED);
     }
 
     @GetMapping("/")
