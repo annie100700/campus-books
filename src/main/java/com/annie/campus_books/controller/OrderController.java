@@ -67,13 +67,12 @@ public class OrderController {
         return new ResponseEntity<>("Order not found",HttpStatus.NOT_FOUND);
     }
 
-    @PatchMapping("/{orderId}/cancel")
-    public ResponseEntity<String> cancelOrderById(@PathVariable UUID orderId) {
-        UserOrder order = orderService.getOrderById(orderId);
+    @PatchMapping("/{id}/status/cancel")
+    public ResponseEntity<String> cancelOrderById(@PathVariable UUID id) {
+        UserOrder order = orderService.getOrderById(id);
         if(order!=null){
-            Book book = order.getBook();
-            orderService.cancelOrder(order,book);
-            return new ResponseEntity<>("Order cancelled successfully",HttpStatus.OK);
+            orderService.cancelOrder(order);
+            return new ResponseEntity<>("Canceled",HttpStatus.OK);
         }
         return new ResponseEntity<>("Order not found",HttpStatus.NOT_FOUND);
     }
