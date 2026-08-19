@@ -153,6 +153,16 @@ public class UserController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+    @GetMapping("/current/orders/sell")
+    public ResponseEntity<?> getSellsOfCurrentUser(@AuthenticationPrincipal User user) {
+        String account = user.getAccount();
+        List<UserOrder> orders=orderService.getSellsByUser(account);
+        if (orders.isEmpty()){
+            return new ResponseEntity<>("You have not sell anything yet",HttpStatus.OK);
+        }
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
     public ResponseEntity<?> updateCurrentUser(@AuthenticationPrincipal User user,
                                                @RequestBody UpdateUserRequest updateUserRequest) {
         User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
