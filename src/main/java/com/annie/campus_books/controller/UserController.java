@@ -7,8 +7,10 @@ import com.annie.campus_books.dto.request.UpdateUserRequest;
 import com.annie.campus_books.dto.response.LoginResponse;
 import com.annie.campus_books.model.Book;
 import com.annie.campus_books.model.User;
+import com.annie.campus_books.model.UserOrder;
 import com.annie.campus_books.service.BookService;
 import com.annie.campus_books.service.JwtService;
+import com.annie.campus_books.service.OrderService;
 import com.annie.campus_books.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class UserController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private OrderService orderService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
@@ -125,6 +130,16 @@ public class UserController {
             return new ResponseEntity<>("There's no matching books",HttpStatus.OK);
         }
         return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+    @GetMapping("/current/orders/purchase")
+    public ResponseEntity<?> getPurchasesOfCurrentUser(@AuthenticationPrincipal User user) {
+        String account = user.getAccount();
+        List<UserOrder> orders=orderService.getPurchasesByUser(account);
+        if (orders.isEmpty()){
+            return new ResponseEntity<>("You have not buy anything",HttpStatus.OK);
+        }
+        return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     public ResponseEntity<?> updateCurrentUser(@AuthenticationPrincipal User user,
