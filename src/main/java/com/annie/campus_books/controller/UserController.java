@@ -75,7 +75,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/current-user")
+    @GetMapping("/current")
     public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
