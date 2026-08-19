@@ -107,6 +107,16 @@ public class UserController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
+    //admin用
+    @GetMapping("/{account}/books")
+    public ResponseEntity<?> getBooksByUser(@PathVariable String account){
+        List<Book> books =bookService.getBooksByUser(account);
+        if (books.isEmpty()){
+            return new ResponseEntity<>("This user doesn't have any books",HttpStatus.OK);
+        }
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
     public ResponseEntity<?> updateCurrentUser(@AuthenticationPrincipal User user,
                                                @RequestBody UpdateUserRequest updateUserRequest) {
         User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
