@@ -90,7 +90,6 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PatchMapping("/current-user")
     @GetMapping("/current/books")
     public ResponseEntity<?> getBooksOfCurrentUser(@AuthenticationPrincipal User user) {
         String account = user.getAccount();
@@ -214,6 +213,7 @@ public class UserController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+    @PatchMapping("/current")
     public ResponseEntity<?> updateCurrentUser(@AuthenticationPrincipal User user,
                                                @RequestBody UpdateUserRequest updateUserRequest) {
         User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
