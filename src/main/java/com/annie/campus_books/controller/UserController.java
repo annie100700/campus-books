@@ -223,9 +223,9 @@ public class UserController {
         User user = userService.getUserByAccount(account);
         if (user != null) {
             userService.deleteUser(user);
-            return new ResponseEntity<>("Deleted", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>("Deleted user doesn't exist", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
