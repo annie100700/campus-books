@@ -76,9 +76,9 @@ public class OrderController {
         UserOrder order = orderService.getOrderById(id);
         if(order!=null){
             orderService.deleteOrderById(id);
-            return new ResponseEntity<>("Deleted",HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>("Order not found",HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
