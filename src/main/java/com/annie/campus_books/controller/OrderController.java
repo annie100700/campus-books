@@ -27,34 +27,34 @@ public class OrderController {
     private BookService bookService;
 
     @PostMapping("/")
-    public ResponseEntity<?> createOrder(@AuthenticationPrincipal User buyer,@RequestPart Integer id) {
+    public ResponseEntity<?> createOrder(@AuthenticationPrincipal User buyer, @RequestPart Integer id) {
         Book book = bookService.getBookById(id);
-        String sellerAccount=book.getSeller().getAccount();
-        if(buyer.getAccount().equals(sellerAccount)){
-            return new ResponseEntity<>("Can not buy your own book",HttpStatus.BAD_REQUEST);
+        String sellerAccount = book.getSeller().getAccount();
+        if (buyer.getAccount().equals(sellerAccount)) {
+            return new ResponseEntity<>("Can not buy your own book", HttpStatus.BAD_REQUEST);
         } else if (book.getStatus().equals(Book.Status.SOLD_OUT)) {
-            return  new ResponseEntity<>("This book already sold out",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("This book already sold out", HttpStatus.BAD_REQUEST);
         }
-            UserOrder userOrder= orderService.createOrder(book,buyer);
-            return new ResponseEntity<>(userOrder, HttpStatus.CREATED);
+        UserOrder userOrder = orderService.createOrder(book, buyer);
+        return new ResponseEntity<>(userOrder, HttpStatus.CREATED);
     }
 
     @GetMapping("/")
     public ResponseEntity<List<UserOrder>> getAllOrders() {
-        List<UserOrder> orders=orderService.getAllOrders();
-        return new ResponseEntity<>(orders,HttpStatus.OK);
+        List<UserOrder> orders = orderService.getAllOrders();
+        return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserOrder> getOrderById(@PathVariable UUID id) {
-        UserOrder order=orderService.getOrderById(id);
-        return new ResponseEntity<>(order,HttpStatus.OK);
+        UserOrder order = orderService.getOrderById(id);
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/status/complete")
     public ResponseEntity<String> completeOrderById(@PathVariable UUID id) {
-        UserOrder order= orderService.getOrderById(id);
-        if (order!=null){
+        UserOrder order = orderService.getOrderById(id);
+        if (order != null) {
             orderService.completeOrder(order);
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -64,7 +64,7 @@ public class OrderController {
     @PatchMapping("/{id}/status/cancel")
     public ResponseEntity<String> cancelOrderById(@PathVariable UUID id) {
         UserOrder order = orderService.getOrderById(id);
-        if(order!=null){
+        if (order != null) {
             orderService.cancelOrder(order);
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -74,7 +74,7 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteOrderById(@PathVariable UUID id) {
         UserOrder order = orderService.getOrderById(id);
-        if(order!=null){
+        if (order != null) {
             orderService.deleteOrderById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
