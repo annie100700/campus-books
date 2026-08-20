@@ -56,9 +56,9 @@ public class OrderController {
         UserOrder order= orderService.getOrderById(id);
         if (order!=null){
             orderService.completeOrder(order);
-            return new ResponseEntity<>("Completed",HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>("Order not found",HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping("/{id}/status/cancel")
