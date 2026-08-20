@@ -29,7 +29,7 @@ public class BookController {
                                      @RequestPart AddBookRequest addBookRequest, @RequestPart MultipartFile imageFile) {
         try {
             Book book = bookService.addBook(addBookRequest, imageFile, user);
-            return new ResponseEntity<>(book, HttpStatus.OK);
+            return new ResponseEntity<>(book, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
