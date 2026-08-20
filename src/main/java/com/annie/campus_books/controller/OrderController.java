@@ -65,11 +65,14 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}/status/cancel")
-    public ResponseEntity<String> cancelOrderById(@PathVariable UUID id) {
+    public ResponseEntity<String> cancelOrderById(@AuthenticationPrincipal User user,@PathVariable UUID id) {
         UserOrder order = orderService.getOrderById(id);
         if (order != null) {
-            orderService.cancelOrder(order);
-            return new ResponseEntity<>(HttpStatus.OK);
+            if(user.getAccount().equals(order.getBuyer().getAccount())||user.getRole().equals(User.Role.ADMIN)) {
+                orderService.cancelOrder(order);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
