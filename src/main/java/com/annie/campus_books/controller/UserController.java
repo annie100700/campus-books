@@ -204,7 +204,7 @@ public class UserController {
         } else if (userService.isPasswordMatch(changePasswordRequest.newPassword(), changePasswordRequest.confirmNewPassword())) {
             return new ResponseEntity<>("New password doesn't match", HttpStatus.BAD_REQUEST);
         }
-        if(userService.isPasswordMatch(changePasswordRequest.oldPassword(),  changePasswordRequest.newPassword())) {
+        if (userService.isPasswordMatch(changePasswordRequest.oldPassword(), changePasswordRequest.newPassword())) {
             return new ResponseEntity<>("Password couldn't be same", HttpStatus.BAD_REQUEST);
         }
         userService.changePassword(user, changePasswordRequest);
