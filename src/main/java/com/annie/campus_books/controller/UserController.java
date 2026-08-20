@@ -59,7 +59,7 @@ public class UserController {
         if (user != null) {
             login = userService.login(user, loginRequest);
         } else {
-            return new ResponseEntity<>("account doesn't exist", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         if (login) {
             String jwt = jwtService.generateLoginAccessToken(user);
