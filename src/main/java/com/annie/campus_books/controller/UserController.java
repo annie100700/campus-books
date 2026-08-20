@@ -193,7 +193,7 @@ public class UserController {
             User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         }
-        return new ResponseEntity<>("updated user doesn't exist", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping("/currrnt/password")
