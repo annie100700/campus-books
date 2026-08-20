@@ -214,7 +214,7 @@ public class UserController {
     @DeleteMapping("/current")
     public ResponseEntity<String> deleteCurrentUser(@AuthenticationPrincipal User user) {
         userService.deleteUser(user);
-        return new ResponseEntity<>("Deleted", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     //admin用
