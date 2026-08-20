@@ -77,13 +77,13 @@ public class BookController {
                     Book updatedBook = bookService.updateBook(book, updateBookRequest, imageFile);
                     return new ResponseEntity<>(updatedBook, HttpStatus.OK);
                 } catch (IOException e) {
-                    return new ResponseEntity<>("Failed to update", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<>("updated book not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
