@@ -66,9 +66,9 @@ public class OrderController {
         UserOrder order = orderService.getOrderById(id);
         if(order!=null){
             orderService.cancelOrder(order);
-            return new ResponseEntity<>("Canceled",HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>("Order not found",HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
