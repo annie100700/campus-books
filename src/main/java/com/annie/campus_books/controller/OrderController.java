@@ -77,14 +77,4 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteOrderById(@PathVariable UUID id) {
-        UserOrder order = orderService.getOrderById(id);
-        if (order != null) {
-            orderService.deleteOrderById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
 }
