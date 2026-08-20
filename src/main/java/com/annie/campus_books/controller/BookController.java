@@ -93,12 +93,12 @@ public class BookController {
         if (book != null) {
             if (user.equals(book.getSeller()) || user.getRole().equals(User.Role.ADMIN)) {
                 bookService.deleteBook(book);
-                return new ResponseEntity<>("deleted", HttpStatus.OK);
+                return new ResponseEntity<>("deleted", HttpStatus.NO_CONTENT);
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<>("Deleted book doesn't exist", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
