@@ -93,10 +93,7 @@ public class UserController {
     @GetMapping("/current/books")
     public ResponseEntity<?> getBooksOfCurrentUser(@AuthenticationPrincipal User user) {
         String account = user.getAccount();
-        List<Book> books=bookService.getBooksByUser(account);
-        if(books.isEmpty()){
-            return new ResponseEntity<>("You don't have any book yet",HttpStatus.OK);
-        }
+        List<Book> books = bookService.getBooksByUser(account);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
@@ -104,40 +101,28 @@ public class UserController {
     public ResponseEntity<?> getBooksOfCurrentUserByStatus(@AuthenticationPrincipal User user,
                                                            @PathVariable Book.Status status) {
         String account = user.getAccount();
-        List<Book> books=bookService.getBooksByUserAndStatus(account,status);
-        if(books.isEmpty()){
-            return new ResponseEntity<>("There's no matching books",HttpStatus.OK);
-        }
+        List<Book> books = bookService.getBooksByUserAndStatus(account, status);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
     //admin用
     @GetMapping("/{account}/books")
-    public ResponseEntity<?> getBooksByUser(@PathVariable String account){
-        List<Book> books =bookService.getBooksByUser(account);
-        if (books.isEmpty()){
-            return new ResponseEntity<>("This user doesn't have any books",HttpStatus.OK);
-        }
+    public ResponseEntity<?> getBooksByUser(@PathVariable String account) {
+        List<Book> books = bookService.getBooksByUser(account);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
     //admin用
     @GetMapping("/{account}/books/{status}")
     public ResponseEntity<?> getBooksByUserAndStatus(@PathVariable String user, @PathVariable Book.Status status) {
-        List<Book> books=bookService.getBooksByUserAndStatus(user,status);
-        if (books.isEmpty()){
-            return new ResponseEntity<>("There's no matching books",HttpStatus.OK);
-        }
+        List<Book> books = bookService.getBooksByUserAndStatus(user, status);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
     @GetMapping("/current/orders/purchase")
     public ResponseEntity<?> getPurchasesOfCurrentUser(@AuthenticationPrincipal User user) {
         String account = user.getAccount();
-        List<UserOrder> orders=orderService.getPurchasesByUser(account);
-        if (orders.isEmpty()){
-            return new ResponseEntity<>("You have not buy anything",HttpStatus.OK);
-        }
+        List<UserOrder> orders = orderService.getPurchasesByUser(account);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
@@ -145,20 +130,14 @@ public class UserController {
     public ResponseEntity<?> getPurchasesOfCurrentUserByStatus(@AuthenticationPrincipal User user,
                                                                @PathVariable UserOrder.Status status) {
         String account = user.getAccount();
-        List<UserOrder> orders=orderService.getPurchasesByUserAndStatus(account,status);
-        if (orders.isEmpty()){
-            return new ResponseEntity<>("There's no matching orders",HttpStatus.OK);
-        }
+        List<UserOrder> orders = orderService.getPurchasesByUserAndStatus(account, status);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     @GetMapping("/current/orders/sell")
     public ResponseEntity<?> getSellsOfCurrentUser(@AuthenticationPrincipal User user) {
         String account = user.getAccount();
-        List<UserOrder> orders=orderService.getSellsByUser(account);
-        if (orders.isEmpty()){
-            return new ResponseEntity<>("You have not sell anything yet",HttpStatus.OK);
-        }
+        List<UserOrder> orders = orderService.getSellsByUser(account);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
@@ -166,50 +145,35 @@ public class UserController {
     public ResponseEntity<?> getSellsOfCurrentUserByStatus(@AuthenticationPrincipal User user,
                                                            @PathVariable UserOrder.Status status) {
         String account = user.getAccount();
-        List<UserOrder> orders=orderService.getSellsByUserAndStatus(account,status);
-        if (orders.isEmpty()){
-            return new ResponseEntity<>("There's no matching orders",HttpStatus.OK);
-        }
+        List<UserOrder> orders = orderService.getSellsByUserAndStatus(account, status);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     //admin用
     @GetMapping("/{account}/orders/purchase")
     public ResponseEntity<?> getPurchasesByUser(@PathVariable String account) {
-        List<UserOrder> orders=orderService.getPurchasesByUser(account);
-        if (orders.isEmpty()){
-            return new ResponseEntity<>("This user have not buy anything yet",HttpStatus.OK);
-        }
+        List<UserOrder> orders = orderService.getPurchasesByUser(account);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     //admin用
     @GetMapping("/{account}/orders/purchase/{status}")
     public ResponseEntity<?> getPurchasesByUserAndStatus(@PathVariable String account, @PathVariable UserOrder.Status status) {
-        List<UserOrder> orders=orderService.getPurchasesByUserAndStatus(account,status);
-        if (orders.isEmpty()){
-            return new ResponseEntity<>("There's no matching orders",HttpStatus.OK);
-        }
+        List<UserOrder> orders = orderService.getPurchasesByUserAndStatus(account, status);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     //admin用
     @GetMapping("/{account}/orders/sell")
     public ResponseEntity<?> getSellsByUser(@PathVariable String account) {
-        List<UserOrder> orders=orderService.getSellsByUser(account);
-        if (orders.isEmpty()){
-            return new ResponseEntity<>("This user have not sell anything yet",HttpStatus.OK);
-        }
+        List<UserOrder> orders = orderService.getSellsByUser(account);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     //admin用
     @GetMapping("/{account}/orders/sell/{status}")
-    public ResponseEntity<?> getSellsByUserAndStatus(@PathVariable String account,@PathVariable UserOrder.Status status) {
-        List<UserOrder> orders=orderService.getSellsByUserAndStatus(account,status);
-        if (orders.isEmpty()){
-            return new ResponseEntity<>("There's no matching orders",HttpStatus.OK);
-        }
+    public ResponseEntity<?> getSellsByUserAndStatus(@PathVariable String account, @PathVariable UserOrder.Status status) {
+        List<UserOrder> orders = orderService.getSellsByUserAndStatus(account, status);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
