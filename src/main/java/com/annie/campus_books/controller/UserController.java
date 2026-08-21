@@ -45,7 +45,7 @@ public class UserController {
             return new ResponseEntity<>("Account already exist", HttpStatus.BAD_REQUEST);
         } else if (userService.emailBeenUsed(registerRequest.email())) {
             return new ResponseEntity<>("Email already been used", HttpStatus.BAD_REQUEST);
-        } else if (userService.isPasswordMatch(registerRequest.password(), registerRequest.confirmPassword())) {
+        } else if (!userService.isPasswordMatch(registerRequest.password(), registerRequest.confirmPassword())) {
             return new ResponseEntity<>("Password doesn't match", HttpStatus.BAD_REQUEST);
         }
         User user = userService.register(registerRequest);
