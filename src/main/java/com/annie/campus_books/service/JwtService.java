@@ -29,8 +29,6 @@ public class JwtService {
                 add("account",user.getAccount()).
                 add("role",user.getRole()).
                 add("authorities",user.getAuthorities()).
-                add("email",user.getEmail()).
-                add("address",user.getAddress()).
                 build();
 
         return Jwts.
