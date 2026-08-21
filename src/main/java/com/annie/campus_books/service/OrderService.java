@@ -81,8 +81,4 @@ public class OrderService {
         bookRepo.save(book);
     }
 
-    public void deleteOrderById(UUID orderId) {
-        orderRepo.deleteById(orderId);
-    }
-
 }
