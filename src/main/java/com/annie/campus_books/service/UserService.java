@@ -6,6 +6,7 @@ import com.annie.campus_books.dto.request.RegisterRequest;
 import com.annie.campus_books.dto.request.UpdateUserRequest;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.repository.UserRepo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,35 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public User register(RegisterRequest registerRequest) {
+        String encodedPassword = passwordEncoder.encode(registerRequest.password());
+        User user = new User();
+        user.setAccount(registerRequest.account());
+        user.setPassword(encodedPassword);
+        user.setEmail(registerRequest.email());
+        if (registerRequest.address() != null) {
+            user.setAddress(registerRequest.address());
+        }
+        user.setRole(User.Role.USER);
+        return repo.save(user);
+    }
+
+    public boolean accountBeenUsed(String userAccount) {
+        return repo.existsById(userAccount);
+    }
+
+    public boolean emailBeenUsed(String email) {
+        return repo.existsUserByEmail(email);
+    }
+
+    public boolean isPasswordMatch(String password, String confirmPassword) {
+        return passwordEncoder.matches(password, confirmPassword);
+    }
+
+    public boolean login(User user, LoginRequest loginRequest) {
+        return passwordEncoder.matches(user.getPassword(), loginRequest.password());
+    }
+
     public List<User> getAllUsers() {
         return repo.findAll();
     }
@@ -30,52 +60,23 @@ public class UserService {
     }
 
     public User updateUserByAccount(User user, UpdateUserRequest updateUserRequest) {
-        if(updateUserRequest.email()!=null){
+        if (updateUserRequest.email() != null) {
             user.setEmail(updateUserRequest.email());
         }
-        if(updateUserRequest.address()!=null){
+        if (updateUserRequest.address() != null) {
             user.setAddress(updateUserRequest.address());
         }
         return repo.save(user);
     }
 
-    public void deleteUser(User user) {
-    user.setDeleted(true);
-        repo.save(user);
-    }
-
-    public boolean accountBeenUsed(String userAccount) {
-        return repo.existsById(userAccount);
-    }
-
-    public boolean emailBeenUsed(String email) {
-        return repo.existsById(email);
-    }
-
-    public User register(RegisterRequest  registerRequest) {
-        String encodedPassword = passwordEncoder.encode(registerRequest.password());
-        User user = new User();
-        user.setAccount(registerRequest.account());
-        user.setPassword(encodedPassword);
-        user.setEmail(registerRequest.email());
-        if (registerRequest.address() != null){
-            user.setAddress(registerRequest.address());
-        }
-        user.setRole(User.Role.USER);
-        return repo.save(user);
-    }
-
-    public boolean login(User user, LoginRequest loginRequest) {
-            return passwordEncoder.matches(user.getPassword(), loginRequest.password());
-    }
-
-    public boolean isPasswordMatch(String password, String confirmPassword) {
-        return passwordEncoder.matches(password, confirmPassword);
-    }
-
     public void changePassword(User user, ChangePasswordRequest changePasswordRequest) {
         String encodedNewPassword = passwordEncoder.encode(changePasswordRequest.newPassword());
         user.setPassword(passwordEncoder.encode(encodedNewPassword));
+        repo.save(user);
+    }
+
+    public void deleteUser(User user) {
+        user.setDeleted(true);
         repo.save(user);
     }
 
