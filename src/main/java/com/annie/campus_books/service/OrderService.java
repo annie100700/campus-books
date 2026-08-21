@@ -54,7 +54,7 @@ public class OrderService {
     }
 
     public List<UserOrder> getPurchasesByUserAndStatus(String account, UserOrder.Status status) {
-        return orderRepo.findAllByBuyerAndStatus(account,status);
+        return orderRepo.findAllByBuyerAndStatus(account, status);
     }
 
     public List<UserOrder> getSellsByUser(String account) {
@@ -62,7 +62,7 @@ public class OrderService {
     }
 
     public List<UserOrder> getSellsByUserAndStatus(String account, UserOrder.Status status) {
-        return orderRepo.findAllBySellerAndStatus(account,status);
+        return orderRepo.findAllBySellerAndStatus(account, status);
     }
 
     public void completeOrder(UserOrder order) {
@@ -74,9 +74,8 @@ public class OrderService {
     public void cancelOrder(UserOrder order) {
         order.setStatus(UserOrder.Status.CANCELED);
 
-        Book book=order.getBook();
+        Book book = order.getBook();
         book.setStatus(Book.Status.FOR_SALE);
-
         orderRepo.save(order);
         bookRepo.save(book);
     }
