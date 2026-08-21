@@ -41,6 +41,7 @@ public class UserService {
 
     public void deleteUser(User user) {
     user.setDeleted(true);
+        repo.save(user);
     }
 
     public boolean accountBeenUsed(String userAccount) {
