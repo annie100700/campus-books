@@ -25,8 +25,14 @@ public class Book {
     private String author;
     private String publisher;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JoinColumn(name = "conditionId", referencedColumnName = "id")
+    @Embedded
+    @AttributeOverride(name = "highlight", column = @Column(name = "highlight"))
+    @AttributeOverride(name = "notes", column = @Column(name = "notes"))
+    @AttributeOverride(name = "stain", column = @Column(name = "stain"))
+    @AttributeOverride(name = "frontCoverMissing", column = @Column(name = "front_cover_missing"))
+    @AttributeOverride(name = "backCoverMissing", column = @Column(name = "back_cover_missing"))
+    @AttributeOverride(name = "splitVolume", column = @Column(name = "split_volume"))
+    @AttributeOverride(name = "other", column = @Column(name = "other"))
     private BookCondition bookCondition;
 
     @ManyToOne

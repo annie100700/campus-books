@@ -2,7 +2,6 @@ package com.annie.campus_books.repository;
 
 import com.annie.campus_books.model.Book;
 
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,9 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface BookRepo extends JpaRepository<Book, Integer> {
-
-    @EntityGraph(attributePaths = "bookCondition")
-    List<Book> findAll();
 
     @EntityGraph(attributePaths = "bookCondition")
     Optional<Book> findById(int bookId);

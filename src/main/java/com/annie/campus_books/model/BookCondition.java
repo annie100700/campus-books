@@ -1,24 +1,12 @@
 package com.annie.campus_books.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import jakarta.persistence.Embeddable;
 
-import java.util.UUID;
+import lombok.Data;
 
-@AllArgsConstructor
-@NoArgsConstructor
-//@Setter
-//@Getter
+@Embeddable
 @Data
-@Entity
 public class BookCondition {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "varchar(36)")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID conditionId;
 
     private Boolean highlight;
     private Boolean notes;
