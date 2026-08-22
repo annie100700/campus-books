@@ -27,7 +27,7 @@ public class OrderController {
     private BookService bookService;
 
     @PostMapping("/")
-    public ResponseEntity<?> createOrder(@AuthenticationPrincipal User buyer, @RequestPart Integer id) {
+    public ResponseEntity<?> createOrder(@AuthenticationPrincipal User buyer, @RequestPart UUID id) {
         Book book = bookService.getBookById(id);
         String sellerAccount = book.getSeller().getAccount();
         if (buyer.getAccount().equals(sellerAccount)) {

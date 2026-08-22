@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -39,7 +40,7 @@ public class BookServiceTest {
     @Test
     void getBookById_whenBookExist_shouldReturnBook() {
         Book book = new Book();
-        int id = 1;
+        UUID id = UUID.randomUUID();
         book.setId(id);
         when(bookRepo.findById(id)).thenReturn(Optional.of(book));
 
@@ -51,8 +52,8 @@ public class BookServiceTest {
 
     @Test
     void getBookById_whenBookNotExist_shouldReturnNull() {
-        int id = 1;
         when(bookRepo.findById(id)).thenReturn(Optional.empty());
+        UUID id = UUID.randomUUID();
 
         Book foundBook = bookService.getBookById(id);
 

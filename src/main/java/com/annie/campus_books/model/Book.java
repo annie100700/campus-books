@@ -2,7 +2,10 @@ package com.annie.campus_books.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,8 +15,10 @@ import java.math.BigDecimal;
 @Entity
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "binary(16)")
+    @JdbcTypeCode(SqlTypes.BINARY)
+    private UUID id;
     private String name;
     private String author;
     private String publisher;

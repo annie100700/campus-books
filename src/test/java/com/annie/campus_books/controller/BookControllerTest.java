@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -71,7 +72,7 @@ public class BookControllerTest {
 
     @Test
     void getBookById_bookFound_shouldReturnBookWith200() throws Exception {
-        int bookId = 1;
+        UUID bookId = UUID.randomUUID();
         Book book = new Book();
         book.setId(bookId);
         when(bookService.getBookById(bookId)).thenReturn(book);
@@ -85,7 +86,7 @@ public class BookControllerTest {
 
     @Test
     void getBookById_bookNotFound_shouldReturn404() throws Exception {
-        int bookId = 1;
+        UUID bookId = UUID.randomUUID();
         when(bookService.getBookById(bookId)).thenReturn(null);
 
         mockMvc.perform(get("/api.campus-books.com/books/" + bookId))
@@ -96,7 +97,7 @@ public class BookControllerTest {
 
     @Test
     void updateBook_shouldReturn200() throws Exception {
-        int bookId = 1;
+        UUID bookId = UUID.randomUUID();
         Book book = new Book();
         book.setId(bookId);
         BookInfoRequest bookInfoRequest = new BookInfoRequest();
@@ -120,7 +121,7 @@ public class BookControllerTest {
 
     @Test
     void deleteBook_bookFound_shouldReturn200() throws Exception {
-        int bookId = 1;
+        UUID bookId = UUID.randomUUID();
         Book book = new Book();
         book.setId(bookId);
         when(bookService.getBookById(bookId)).thenReturn(book);
@@ -133,7 +134,7 @@ public class BookControllerTest {
 
     @Test
     void deleteBook_bookNotFound_shouldReturn404() throws Exception {
-        int bookId = 1;
+        UUID bookId = UUID.randomUUID();
         when(bookService.getBookById(bookId)).thenReturn(null);
 
         mockMvc.perform(delete("/api.campus-books.com/books/" + bookId))

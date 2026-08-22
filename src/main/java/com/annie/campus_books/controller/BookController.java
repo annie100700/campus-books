@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin
 @RequestMapping("/api.campus-books.com/books")
@@ -42,7 +43,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable int id) {
+    public ResponseEntity<Book> getBookById(@PathVariable UUID id) {
         Book book = bookService.getBookById(id);
         if (book != null)
             return new ResponseEntity<>(book, HttpStatus.OK);
@@ -51,7 +52,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}/image")
-    public ResponseEntity<byte[]> getBookImageById(@PathVariable int id) {
+    public ResponseEntity<byte[]> getBookImageById(@PathVariable UUID id) {
         Book book = bookService.getBookById(id);
         if (book != null) {
             byte[] imageFile = book.getImageData();
@@ -67,7 +68,7 @@ public class BookController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateBook(@AuthenticationPrincipal User user, @PathVariable int id,
+    public ResponseEntity<?> updateBook(@AuthenticationPrincipal User user, @PathVariable UUID id,
                                         @RequestPart UpdateBookRequest updateBookRequest,
                                         @RequestPart(required = false) MultipartFile imageFile) {
         Book book = bookService.getBookById(id);
@@ -88,7 +89,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBookById(@AuthenticationPrincipal User user, @PathVariable int id) {
+    public ResponseEntity<String> deleteBookById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
         Book book = bookService.getBookById(id);
         if (book != null) {
             if (user.equals(book.getSeller()) || user.getRole().equals(User.Role.ADMIN)) {
