@@ -8,12 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface BookRepo extends JpaRepository<Book, Integer> {
 
-    @EntityGraph(attributePaths = "bookCondition")
-    Optional<Book> findById(int bookId);
+    @Query("SELECT b FROM Book b WHERE "
+            + "b.id=:id")
+    Optional<Book> findByUuid(UUID id);
 
     @Query("SELECT b FROM Book b WHERE "
             + "b.seller.account=:account")

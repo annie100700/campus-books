@@ -56,8 +56,8 @@ public class BookService {
         return repo.findAll();
     }
 
-        return repo.findById(id).orElse(null);
     public Book getBookById(UUID id) {
+        return repo.findByUuid(id).orElse(null);
     }
 
     public List<Book> getBooksByUser(String account) {

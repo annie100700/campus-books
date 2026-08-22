@@ -42,18 +42,18 @@ public class BookServiceTest {
         Book book = new Book();
         UUID id = UUID.randomUUID();
         book.setId(id);
-        when(bookRepo.findById(id)).thenReturn(Optional.of(book));
+        when(bookRepo.findByUuid(id)).thenReturn(Optional.of(book));
 
         Book foundBook = bookService.getBookById(id);
 
         assertNotNull(foundBook);
-        verify(bookRepo).findById(id);
+        verify(bookRepo).findByUuid(id);
     }
 
     @Test
     void getBookById_whenBookNotExist_shouldReturnNull() {
-        when(bookRepo.findById(id)).thenReturn(Optional.empty());
         UUID id = UUID.randomUUID();
+        when(bookRepo.findByUuid(id)).thenReturn(Optional.empty());
 
         Book foundBook = bookService.getBookById(id);
 
