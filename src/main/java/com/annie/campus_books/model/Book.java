@@ -1,25 +1,27 @@
 package com.annie.campus_books.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+
+import lombok.Data;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
-//@Getter
-//@Setter
 @Data
 @Entity
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "binary(16)")
     @JdbcTypeCode(SqlTypes.BINARY)
     private UUID id;
+
     private String name;
+    private String version;
     private String author;
     private String publisher;
 
@@ -28,7 +30,7 @@ public class Book {
     private BookCondition bookCondition;
 
     @ManyToOne
-    @JoinColumn(name = "sellerAccount",referencedColumnName = "account")
+    @JoinColumn(name = "sellerAccount", referencedColumnName = "account")
     private User seller;
 
     private BigDecimal listPrice;
@@ -37,6 +39,7 @@ public class Book {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
+
     public enum Status {
         FOR_SALE,
         SOLD_OUT,
