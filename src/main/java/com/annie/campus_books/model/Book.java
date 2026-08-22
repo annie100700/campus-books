@@ -24,7 +24,7 @@ public class Book {
     private String publisher;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JoinColumn(name = "conditionId",referencedColumnName = "conditionId")
+    @JoinColumn(name = "conditionId", referencedColumnName = "id")
     private BookCondition bookCondition;
 
     @ManyToOne
