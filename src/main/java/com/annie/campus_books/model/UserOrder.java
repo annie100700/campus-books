@@ -37,7 +37,6 @@ public class UserOrder {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
 
-    @JdbcTypeCode(SqlTypes.JSON)
     private Status status;
     public enum Status {
         IN_PROGRESS,
