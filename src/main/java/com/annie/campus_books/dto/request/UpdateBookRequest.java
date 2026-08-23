@@ -11,11 +11,12 @@ public record UpdateBookRequest(String name, String author, String publisher,
                                 Boolean splitVolume,
                                 String other,
                                 BigDecimal listPrice, BigDecimal sellingPrice) {
-    public UpdateBookRequest(){
-        this("test-name","test-author","test-publisher",
+    public UpdateBookRequest() {
+        this("test-name", "test-author", "test-publisher",
                 false, false, false, false, false, false,
                 "test-other",
-                new BigDecimal(100),new BigDecimal(10)
+                new BigDecimal(100), new BigDecimal(10)
         );
     }
+
 }
