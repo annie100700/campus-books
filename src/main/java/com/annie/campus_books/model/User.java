@@ -1,15 +1,15 @@
 package com.annie.campus_books.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+
+import lombok.Data;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Entity
 public class User {
@@ -24,8 +24,9 @@ public class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
     public enum Role {
-        ADMIN,USER
+        ADMIN, USER
     }
 
     private boolean deleted;
