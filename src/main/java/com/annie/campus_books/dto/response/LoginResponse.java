@@ -11,8 +11,7 @@ import java.util.Date;
 public class LoginResponse {
     private String jwt;
     private String account;
-    private User.Role role;
-    private Collection<? extends GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> role;
     private Date expiration;
 
     public static LoginResponse getResponseOf( User user,String jwt,Date expiration) {
@@ -20,7 +19,6 @@ public class LoginResponse {
         loginResponse.jwt=jwt;
         loginResponse.account=user.getAccount();
         loginResponse.role=user.getRole();
-        loginResponse.authorities=user.getAuthorities();
         loginResponse.expiration=expiration;
         return loginResponse;
     }

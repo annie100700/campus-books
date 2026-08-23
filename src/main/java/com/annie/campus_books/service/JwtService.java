@@ -33,7 +33,6 @@ public class JwtService {
                 expiration(new Date(expirationMS)).
                 add("account", user.getAccount()).
                 add("role", user.getRole()).
-                add("authorities", user.getAuthorities()).
                 build();
 
         return Jwts.
