@@ -1,7 +1,9 @@
 package com.annie.campus_books.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.*;
+
 import lombok.Data;
 
 import org.hibernate.annotations.JdbcTypeCode;
@@ -22,22 +24,23 @@ public class UserOrder {
     private UUID id;
 
     @OneToOne
-    @JoinColumn(name = "bookId",referencedColumnName = "id")
+    @JoinColumn(name = "bookId", referencedColumnName = "id")
     private Book book;
     private String bookName;
     private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn(name = "sellerAccount",referencedColumnName = "account")
+    @JoinColumn(name = "sellerAccount", referencedColumnName = "account")
     private User seller;
     @ManyToOne
-    @JoinColumn(name = "buyerAccount",referencedColumnName = "account")
+    @JoinColumn(name = "buyerAccount", referencedColumnName = "account")
     private User buyer;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
 
     private Status status;
+
     public enum Status {
         IN_PROGRESS,
         COMPLETED,
