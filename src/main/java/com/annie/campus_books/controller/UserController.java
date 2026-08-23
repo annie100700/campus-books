@@ -64,7 +64,7 @@ public class UserController {
         if (login) {
             String jwt = jwtService.generateLoginAccessToken(user);
             Date expiration = jwtService.parseToken(jwt).getExpiration();
-            return new ResponseEntity<>(LoginResponse.getResponseOf(user, jwt, expiration), HttpStatus.OK);
+            return new ResponseEntity<>(new LoginResponse(jwt, user, expiration), HttpStatus.OK);
         }
         return new ResponseEntity<>("Incorrect password", HttpStatus.UNAUTHORIZED);
     }
