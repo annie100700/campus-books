@@ -17,9 +17,9 @@ public class UserOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "varchar(36)")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID orderId;
+    @Column(columnDefinition = "binary(16)")
+    @JdbcTypeCode(SqlTypes.BINARY)
+    private UUID id;
 
     @OneToOne
     @JoinColumn(name = "bookId",referencedColumnName = "id")
