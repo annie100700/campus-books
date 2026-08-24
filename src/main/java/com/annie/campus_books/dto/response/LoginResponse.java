@@ -8,8 +8,8 @@ import java.util.Date;
 
 public record LoginResponse(String jwt, String account, Collection<? extends GrantedAuthority> role, Date expiration) {
 
-    public LoginResponse(String jwt, User user, Date expiration) {
-        this(jwt, user.getAccount(), user.getRole(), expiration);
+    public LoginResponse(GenerateTokenResponse generateTokenResponse, User user) {
+        this(generateTokenResponse.jwt(), user.getAccount(), user.getRole(), generateTokenResponse.expiration());
     }
 
 }
