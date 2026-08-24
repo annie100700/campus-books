@@ -37,18 +37,15 @@ public class SecurityConfig {
                 csrf(AbstractHttpConfigurer::disable).
                 authorizeHttpRequests(requests -> requests.
                         //permitAll
-                                requestMatchers(HttpMethod.GET, "/api.campus-books.com/books/").permitAll().
-                        requestMatchers(HttpMethod.GET, "/api.campus-books.com/books/{id}").permitAll().
-                        requestMatchers(HttpMethod.GET, "/api.campus-books.com/books/{id}/image").permitAll().
-                        requestMatchers(HttpMethod.GET, "/api.campus-books.com/books/search").permitAll().
-                        requestMatchers(HttpMethod.POST, "/api.campus-books.com/users/register").permitAll().
-                        requestMatchers(HttpMethod.POST, "/api.campus-books.com/users/login").permitAll().
+                                requestMatchers(HttpMethod.GET, "/api.campus-books.com/books/**").permitAll().
+                        requestMatchers(HttpMethod.POST, "/api.campus-books.com/books/users/*?").permitAll().
                         // hasAuthority
                                 requestMatchers(HttpMethod.GET, "/api.campus-books.com/users/").hasAuthority("ADMIN").
-                        requestMatchers(HttpMethod.GET, "/api.campus-books.com/users/{account}").hasAuthority("ADMIN").
-                        requestMatchers(HttpMethod.PATCH, "/api.campus-books.com/users/{account}").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.GET, "/api.campus-books.com/users/*?/**").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.PATCH, "/api.campus-books.com/users/*?").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.PATCH, "/api.campus-books.com/users/current-user/password").hasAuthority("USER").
-                        requestMatchers(HttpMethod.DELETE, "/api.campus-books.com/users/{account}").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.DELETE, "/api.campus-books.com/users/*?").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.GET, "/api.campus-books.com/orders/").hasAuthority("ADMIN").
                         // authenticated
                                 anyRequest().authenticated()).
                 addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
