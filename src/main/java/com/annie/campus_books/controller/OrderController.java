@@ -63,7 +63,7 @@ public class OrderController {
     public ResponseEntity<String> completeOrderById(@AuthenticationPrincipal User user,@PathVariable UUID id) {
         UserOrder order = orderService.getOrderById(id);
         if (order != null) {
-            if(user.getAccount().equals(order.getBuyer().getAccount())||user.getRole().equals(User.Role.ADMIN)) {
+            if (user.getAccount().equals(order.getBuyer().getAccount()) || user.isAdmin()) {
                 orderService.completeOrder(order);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
@@ -76,7 +76,7 @@ public class OrderController {
     public ResponseEntity<String> cancelOrderById(@AuthenticationPrincipal User user,@PathVariable UUID id) {
         UserOrder order = orderService.getOrderById(id);
         if (order != null) {
-            if(user.getAccount().equals(order.getBuyer().getAccount())||user.getRole().equals(User.Role.ADMIN)) {
+            if (user.getAccount().equals(order.getBuyer().getAccount()) || user.isAdmin()) {
                 orderService.cancelOrder(order);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
