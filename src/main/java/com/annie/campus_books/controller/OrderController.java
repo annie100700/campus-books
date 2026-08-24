@@ -46,9 +46,17 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserOrder> getOrderById(@PathVariable UUID id) {
+    public ResponseEntity<UserOrder> getOrderById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
         UserOrder order = orderService.getOrderById(id);
-        return new ResponseEntity<>(order, HttpStatus.OK);
+        if (order != null) {
+            if (user.getAccount().equals(order.getBuyer().getAccount()) ||
+                    user.getAccount().equals(order.getSeller().getAccount()) ||
+                    user.isAdmin()) {
+                return new ResponseEntity<>(order, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping("/{id}/status/complete")
