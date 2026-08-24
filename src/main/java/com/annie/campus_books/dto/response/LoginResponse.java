@@ -1,6 +1,7 @@
 package com.annie.campus_books.dto.response;
 
 import com.annie.campus_books.model.User;
+
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
