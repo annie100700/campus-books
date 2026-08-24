@@ -35,4 +35,8 @@ public class User {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
+    public boolean isAdmin() {
+        return role.equals(Role.ADMIN);
+    }
+
 }
