@@ -1,5 +1,6 @@
 package com.annie.campus_books.service;
 
+import com.annie.campus_books.dto.response.GenerateTokenResponse;
 import com.annie.campus_books.model.User;
 
 import io.jsonwebtoken.Claims;
@@ -25,21 +26,23 @@ public class JwtService {
         this.jwtParser = Jwts.parser().verifyWith(secretKey).build();
     }
 
-    public String generateLoginAccessToken(User user) {
-        long expirationMS = Instant.now().plusSeconds(validSeconds).getEpochSecond() * 1000;
+    public GenerateTokenResponse generateToken(User user) {
+        Date expirationAt = new Date(Instant.now().plusSeconds(validSeconds).getEpochSecond() * 1000);
 
         Claims claims = Jwts.claims().
                 issuedAt(new Date()).
-                expiration(new Date(expirationMS)).
+                expiration(expirationAt).
                 add("account", user.getAccount()).
                 add("role", user.getRole()).
                 build();
 
-        return Jwts.
+        String jwt = Jwts.
                 builder().
                 claims(claims).
                 signWith(secretKey).
                 compact();
+
+        return new GenerateTokenResponse(jwt, expirationAt);
     }
 
     public Claims parseToken(String jwt) throws JwtException {
