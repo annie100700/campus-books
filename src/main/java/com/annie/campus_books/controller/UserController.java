@@ -4,6 +4,7 @@ import com.annie.campus_books.dto.request.ChangePasswordRequest;
 import com.annie.campus_books.dto.request.LoginRequest;
 import com.annie.campus_books.dto.request.RegisterRequest;
 import com.annie.campus_books.dto.request.UpdateUserRequest;
+import com.annie.campus_books.dto.response.GenerateTokenResponse;
 import com.annie.campus_books.dto.response.LoginResponse;
 import com.annie.campus_books.model.Book;
 import com.annie.campus_books.model.User;
@@ -19,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -62,9 +62,8 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         if (login) {
-            String jwt = jwtService.generateLoginAccessToken(user);
-            Date expiration = jwtService.parseToken(jwt).getExpiration();
-            return new ResponseEntity<>(new LoginResponse(jwt, user, expiration), HttpStatus.OK);
+            GenerateTokenResponse jwt = jwtService.generateToken(user);
+            return new ResponseEntity<>(new LoginResponse(jwt, user), HttpStatus.OK);
         }
         return new ResponseEntity<>("Incorrect password", HttpStatus.UNAUTHORIZED);
     }
