@@ -38,7 +38,7 @@ public class SecurityConfig {
                 authorizeHttpRequests(requests -> requests.
                         //permitAll
                                 requestMatchers(HttpMethod.GET, "/api.campus-books.com/books/**").permitAll().
-                        requestMatchers(HttpMethod.POST, "/api.campus-books.com/books/users/*?").permitAll().
+                        requestMatchers(HttpMethod.POST, "/api.campus-books.com/users/*?").permitAll().
                         // hasAuthority
                                 requestMatchers(HttpMethod.GET, "/api.campus-books.com/users/").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.GET, "/api.campus-books.com/users/*?/**").hasAuthority("ADMIN").
