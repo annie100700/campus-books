@@ -11,7 +11,7 @@ import tools.jackson.databind.json.JsonMapper;
 import java.lang.reflect.Type;
 
 @AllArgsConstructor
-public class JsonFormatterUtil extends AbstractJsonFormatMapper {
+public final class JsonFormatterUtil extends AbstractJsonFormatMapper {
 
     private final JsonMapper jsonMapper;
 
