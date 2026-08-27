@@ -32,10 +32,6 @@ public class User implements UserDetails {
 
     private boolean deleted;
 
-    public Collection<? extends GrantedAuthority> getRole() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
     public boolean isAdmin() {
         return role.equals(Role.ADMIN);
     }
