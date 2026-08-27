@@ -1,9 +1,11 @@
 package com.annie.campus_books.utilities;
 
 import lombok.AllArgsConstructor;
+
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.JavaType;
 import org.hibernate.type.format.AbstractJsonFormatMapper;
+
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.json.JsonMapper;
@@ -22,7 +24,7 @@ public final class JsonFormatterUtil extends AbstractJsonFormatMapper {
 
     @Override
     protected <T> T fromString(CharSequence charSequence, Type type) {
-        return jsonMapper.readValue(charSequence.toString(),jsonMapper.constructType(type));
+        return jsonMapper.readValue(charSequence.toString(), jsonMapper.constructType(type));
     }
 
     @Override
@@ -44,7 +46,7 @@ public final class JsonFormatterUtil extends AbstractJsonFormatMapper {
     public <T> void writeToTarget(T value, JavaType<T> javaType, Object target, WrapperOptions options) {
 
         jsonMapper.writerFor(jsonMapper.constructType(javaType.getJavaType())).
-                writeValue((JsonGenerator)target, value);
+                writeValue((JsonGenerator) target, value);
     }
 
     @Override
