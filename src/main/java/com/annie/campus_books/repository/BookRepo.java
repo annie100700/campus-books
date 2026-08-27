@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface BookRepo extends JpaRepository<Book, Integer> {
+public interface BookRepo extends JpaRepository<Book, UUID> {
 
     @Query("SELECT b FROM Book b WHERE "
             + "b.id=:id")
