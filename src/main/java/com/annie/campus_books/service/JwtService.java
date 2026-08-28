@@ -45,13 +45,16 @@ public class JwtService {
                 add("role", user.getRole()).
                 build();
 
-        String jwt = Jwts.
+        String accessToken = Jwts.
                 builder().
                 claims(claims).
                 signWith(secretKey).
                 compact();
 
-        return new GenerateTokenResponse(jwt, expirationAt);
+        RefreshToken refreshToken = generateRefreshToken(user);
+        return new GenerateTokenResponse(accessToken, expirationAt, refreshToken);
+    }
+
     public RefreshToken generateRefreshToken(User user) {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(user);
