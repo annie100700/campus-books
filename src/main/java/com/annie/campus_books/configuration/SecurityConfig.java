@@ -27,8 +27,9 @@ public class SecurityConfig {
 
     @Bean
     public JwtService jwtService(@Value("${jwt.secret-key}") String secretKeyStr,
-                                 @Value("${jwt.valid-seconds}") int validSeconds) {
-        return new JwtService(secretKeyStr, validSeconds);
+                                 @Value("${jwt.access-valid-seconds}") int accessValidSeconds,
+                                 @Value("${jwt.refresh-valid-seconds}") int refreshValidSeconds) {
+        return new JwtService(secretKeyStr, accessValidSeconds, refreshValidSeconds);
     }
 
     @Bean
