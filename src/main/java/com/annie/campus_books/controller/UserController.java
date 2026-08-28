@@ -68,6 +68,12 @@ public class UserController {
         return new ResponseEntity<>("Incorrect password", HttpStatus.UNAUTHORIZED);
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<GenerateTokenResponse> refresh(@RequestBody String refreshToken) {
+        GenerateTokenResponse generateTokenResponse = jwtService.refreshToken(refreshToken);
+        return new ResponseEntity<>(generateTokenResponse, HttpStatus.OK);
+    }
+
     //logout
 
     @GetMapping("/")
