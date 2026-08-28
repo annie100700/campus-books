@@ -12,6 +12,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKey;
 
@@ -66,6 +67,19 @@ public class JwtService {
         Instant expirationAt = Instant.now().plusSeconds(refreshValidSecond);
         refreshToken.setExpirationDate(expirationAt);
         return refreshTokenRepo.save(refreshToken);
+    }
+
+    @Transactional
+    public GenerateTokenResponse refreshToken(String RefreshTokenStr) {
+        RefreshToken refreshToken = refreshTokenRepo.findByToken(RefreshTokenStr).
+                orElseThrow(() -> new JwtException("Refresh token not found"));
+        if (refreshToken.isExpired()) {
+            refreshTokenRepo.delete(refreshToken);
+            throw new JwtException("Refresh token expired");
+        }
+        User user = refreshToken.getUser();
+        refreshTokenRepo.delete(refreshToken);
+        return generateToken(user);
     }
 
     public Claims parseToken(String jwt) throws JwtException {
