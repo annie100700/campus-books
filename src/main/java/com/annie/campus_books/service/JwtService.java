@@ -57,7 +57,7 @@ public class JwtService {
         return new GenerateTokenResponse(accessToken, expirationAt, refreshToken);
     }
 
-    public RefreshToken generateRefreshToken(User user) {
+    private RefreshToken generateRefreshToken(User user) {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(user);
 
