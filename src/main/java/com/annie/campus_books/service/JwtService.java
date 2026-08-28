@@ -21,21 +21,22 @@ import java.util.UUID;
 public class JwtService {
 
     private final SecretKey secretKey;
-    private final int validSeconds;
+    private final int accessValidSeconds;
     private final JwtParser jwtParser;
 
-    public JwtService(String secretKeyStr, int validSeconds) {
     private final int refreshValidSecond;
     @Autowired
     private RefreshTokenRepo refreshTokenRepo;
 
+    public JwtService(String secretKeyStr, int accessValidSeconds, int refreshValidSecond) {
         this.secretKey = Keys.hmacShaKeyFor(secretKeyStr.getBytes());
-        this.validSeconds = validSeconds;
+        this.accessValidSeconds = accessValidSeconds;
         this.jwtParser = Jwts.parser().verifyWith(secretKey).build();
+        this.refreshValidSecond = refreshValidSecond;
     }
 
     public GenerateTokenResponse generateToken(User user) {
-        Date expirationAt = new Date(Instant.now().plusSeconds(validSeconds).getEpochSecond() * 1000);
+        Date expirationAt = new Date(Instant.now().plusSeconds(accessValidSeconds).getEpochSecond() * 1000);
 
         Claims claims = Jwts.claims().
                 issuedAt(new Date()).
