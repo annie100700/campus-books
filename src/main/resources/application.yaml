@@ -22,4 +22,5 @@ spring:
       max-request-size: 5MB
 jwt:
   secret-key: ${SECRET_KEY}
-  valid-seconds: 300
+  access-valid-seconds: 60
+  refresh-valid-seconds: 300
