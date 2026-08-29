@@ -86,6 +86,10 @@ public class JwtService {
         return jwtParser.parseSignedClaims(jwt).getPayload();
     }
 
+    public RefreshToken getRefreshToken(String RefreshTokenStr) {
+        return refreshTokenRepo.findByToken(RefreshTokenStr).orElse(null);
+    }
+
     public void deleteByToken(String refreshTokenStr) {
         refreshTokenRepo.deleteByToken(refreshTokenStr);
     }
