@@ -27,8 +27,8 @@ public class OrderController {
     private BookService bookService;
 
     @PostMapping("/")
-    public ResponseEntity<?> createOrder(@AuthenticationPrincipal User buyer, @RequestPart UUID id) {
-        Book book = bookService.getBookById(id);
+    public ResponseEntity<?> createOrder(@AuthenticationPrincipal User buyer, @RequestBody UUID bookId) {
+        Book book = bookService.getBookById(bookId);
         String sellerAccount = book.getSeller().getAccount();
         if (buyer.getAccount().equals(sellerAccount)) {
             return new ResponseEntity<>("Can not buy your own book", HttpStatus.BAD_REQUEST);
