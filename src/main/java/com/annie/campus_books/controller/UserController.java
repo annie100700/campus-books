@@ -7,6 +7,7 @@ import com.annie.campus_books.dto.request.UpdateUserRequest;
 import com.annie.campus_books.dto.response.GenerateTokenResponse;
 import com.annie.campus_books.dto.response.LoginResponse;
 import com.annie.campus_books.model.Book;
+import com.annie.campus_books.model.RefreshToken;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.model.UserOrder;
 import com.annie.campus_books.service.BookService;
@@ -74,7 +75,19 @@ public class UserController {
         return new ResponseEntity<>(generateTokenResponse, HttpStatus.OK);
     }
 
-    //logout
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@AuthenticationPrincipal User user, @RequestBody String refreshTokenStr) {
+        RefreshToken refreshToken = jwtService.getRefreshToken(refreshTokenStr);
+        if (refreshToken != null) {
+            String tokenOwner = refreshToken.getUser().getAccount();
+            if (user.getAccount().equals(tokenOwner) || user.isAdmin()) {
+                jwtService.deleteByToken(refreshTokenStr);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
     @GetMapping("/")
     public ResponseEntity<List<User>> getAllUsers() {
