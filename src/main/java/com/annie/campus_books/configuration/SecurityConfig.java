@@ -41,7 +41,8 @@ public class SecurityConfig {
                 authorizeHttpRequests(requests -> requests.
                         //permitAll
                                 requestMatchers(builder.matcher(HttpMethod.GET, "/books/**")).permitAll().
-                        requestMatchers(builder.matcher(HttpMethod.POST, "/users/*?")).permitAll().
+                        requestMatchers(builder.matcher(HttpMethod.POST, "/users/register")).permitAll().
+                        requestMatchers(builder.matcher(HttpMethod.POST, "/users/login")).permitAll().
                         // hasAuthority
                                 requestMatchers(builder.matcher(HttpMethod.GET, "/users/")).hasAuthority("ADMIN").
                         requestMatchers(builder.matcher(HttpMethod.GET, "/users/*?/**")).hasAuthority("ADMIN").
