@@ -227,7 +227,7 @@ public class UserController {
     @PatchMapping("/currrnt/password")
     public ResponseEntity<String> changePassword(@AuthenticationPrincipal User user,
                                                  @RequestBody ChangePasswordRequest changePasswordRequest) {
-        if (userService.isPasswordMatch(user.getPassword(), changePasswordRequest.oldPassword())) {
+        if (userService.isPasswordMatch(changePasswordRequest.oldPassword(), user.getPassword())) {
             return new ResponseEntity<>("Password incorrect", HttpStatus.BAD_REQUEST);
         } else if (!changePasswordRequest.newPassword().equals(changePasswordRequest.confirmNewPassword())) {
             return new ResponseEntity<>("New password doesn't match", HttpStatus.BAD_REQUEST);
