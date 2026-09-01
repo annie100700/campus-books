@@ -70,9 +70,17 @@ public class UserController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<GenerateTokenResponse> refresh(@RequestBody String refreshToken) {
-        GenerateTokenResponse generateTokenResponse = jwtService.refreshToken(refreshToken);
-        return new ResponseEntity<>(generateTokenResponse, HttpStatus.OK);
+    public ResponseEntity<GenerateTokenResponse> refresh(@RequestBody String refreshTokenStr) {
+        RefreshToken refreshToken=jwtService.getRefreshToken(refreshTokenStr);
+        if(refreshToken!=null){
+            if (refreshToken.isExpired()) {
+                jwtService.deleteByToken(refreshTokenStr);
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            GenerateTokenResponse generateTokenResponse = jwtService.refreshToken(refreshToken);
+            return new ResponseEntity<>(generateTokenResponse, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/logout")
