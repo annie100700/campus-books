@@ -42,7 +42,9 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-        if (userService.accountBeenUsed(registerRequest.account())) {
+        if (registerRequest.isNullOrBlank()) {
+            return new ResponseEntity<>("Account and password is required field", HttpStatus.BAD_REQUEST);
+        } else if (userService.accountBeenUsed(registerRequest.account())) {
             return new ResponseEntity<>("Account already exist", HttpStatus.BAD_REQUEST);
         } else if (userService.emailBeenUsed(registerRequest.email())) {
             return new ResponseEntity<>("Email already been used", HttpStatus.BAD_REQUEST);
