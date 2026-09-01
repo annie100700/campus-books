@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean login(User user, LoginRequest loginRequest) {
-        return passwordEncoder.matches(user.getPassword(), loginRequest.password());
+        return passwordEncoder.matches(loginRequest.password(), user.getPassword());
     }
 
     public List<User> getAllUsers() {
