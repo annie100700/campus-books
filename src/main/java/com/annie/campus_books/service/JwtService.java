@@ -70,13 +70,7 @@ public class JwtService {
     }
 
     @Transactional
-    public GenerateTokenResponse refreshToken(String RefreshTokenStr) {
-        RefreshToken refreshToken = refreshTokenRepo.findByToken(RefreshTokenStr).
-                orElseThrow(() -> new JwtException("Refresh token not found"));
-        if (refreshToken.isExpired()) {
-            refreshTokenRepo.delete(refreshToken);
-            throw new JwtException("Refresh token expired");
-        }
+    public GenerateTokenResponse refreshToken(RefreshToken refreshToken) {
         User user = refreshToken.getUser();
         refreshTokenRepo.delete(refreshToken);
         return generateToken(user);
