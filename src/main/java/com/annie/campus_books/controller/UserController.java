@@ -48,7 +48,7 @@ public class UserController {
             return new ResponseEntity<>("Account already exist", HttpStatus.BAD_REQUEST);
         } else if (userService.emailBeenUsed(registerRequest.email())) {
             return new ResponseEntity<>("Email already been used", HttpStatus.BAD_REQUEST);
-        } else if (!userService.isPasswordMatch(registerRequest.password(), registerRequest.confirmPassword())) {
+        } else if (!registerRequest.password().equals(registerRequest.confirmPassword())) {
             return new ResponseEntity<>("Password doesn't match", HttpStatus.BAD_REQUEST);
         }
         User user = userService.register(registerRequest);
@@ -229,10 +229,10 @@ public class UserController {
                                                  @RequestBody ChangePasswordRequest changePasswordRequest) {
         if (userService.isPasswordMatch(user.getPassword(), changePasswordRequest.oldPassword())) {
             return new ResponseEntity<>("Password incorrect", HttpStatus.BAD_REQUEST);
-        } else if (userService.isPasswordMatch(changePasswordRequest.newPassword(), changePasswordRequest.confirmNewPassword())) {
+        } else if (!changePasswordRequest.newPassword().equals(changePasswordRequest.confirmNewPassword())) {
             return new ResponseEntity<>("New password doesn't match", HttpStatus.BAD_REQUEST);
         }
-        if (userService.isPasswordMatch(changePasswordRequest.oldPassword(), changePasswordRequest.newPassword())) {
+        if (changePasswordRequest.oldPassword().equals(changePasswordRequest.newPassword())) {
             return new ResponseEntity<>("Password couldn't be same", HttpStatus.BAD_REQUEST);
         }
         userService.changePassword(user, changePasswordRequest);
