@@ -73,8 +73,8 @@ public class UserController {
 
     @PostMapping("/refresh")
     public ResponseEntity<GenerateTokenResponse> refresh(@RequestBody String refreshTokenStr) {
-        RefreshToken refreshToken=jwtService.getRefreshToken(refreshTokenStr);
-        if(refreshToken!=null){
+        RefreshToken refreshToken = jwtService.getRefreshToken(refreshTokenStr);
+        if (refreshToken != null) {
             if (refreshToken.isExpired()) {
                 jwtService.deleteByToken(refreshTokenStr);
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -238,6 +238,8 @@ public class UserController {
         userService.changePassword(user, changePasswordRequest);
         return new ResponseEntity<>("Password changed", HttpStatus.OK);
     }
+
+    //resetPassword
 
     @DeleteMapping("/current")
     public ResponseEntity<String> deleteCurrentUser(@AuthenticationPrincipal User user) {
