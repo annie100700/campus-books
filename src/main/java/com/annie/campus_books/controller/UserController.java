@@ -86,7 +86,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@AuthenticationPrincipal User user, @RequestBody String refreshTokenStr) {
+    public ResponseEntity<HttpStatus> logout(@AuthenticationPrincipal User user, @RequestBody String refreshTokenStr) {
         RefreshToken refreshToken = jwtService.getRefreshToken(refreshTokenStr);
         if (refreshToken != null) {
             String tokenOwner = refreshToken.getUser().getAccount();
@@ -94,7 +94,7 @@ public class UserController {
                 jwtService.deleteByToken(refreshTokenStr);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
