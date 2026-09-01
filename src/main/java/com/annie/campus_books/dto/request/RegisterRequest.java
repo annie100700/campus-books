@@ -7,4 +7,9 @@ public record RegisterRequest(String account, String email, String address, Stri
                 "test-password", "test-password");
     }
 
+    public boolean isNullOrBlank() {
+        return account == null || password == null || confirmPassword == null ||
+                account.isBlank() || password.isBlank() || confirmPassword.isBlank();
+    }
+
 }
