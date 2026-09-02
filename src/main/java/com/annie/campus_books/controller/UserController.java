@@ -83,12 +83,12 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<HttpStatus> logout(@AuthenticationPrincipal User user, @RequestBody String refreshTokenStr) {
-        RefreshToken refreshToken = jwtService.getRefreshToken(refreshTokenStr);
+    public ResponseEntity<HttpStatus> logout(@AuthenticationPrincipal User user, @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        RefreshToken refreshToken = jwtService.getRefreshToken(refreshTokenRequest.refreshToken());
         if (refreshToken != null) {
             String tokenOwner = refreshToken.getUser().getAccount();
             if (user.getAccount().equals(tokenOwner) || user.isAdmin()) {
-                jwtService.deleteByToken(refreshTokenStr);
+                jwtService.deleteByToken(refreshTokenRequest.refreshToken());
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
