@@ -18,7 +18,6 @@ import javax.crypto.SecretKey;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.UUID;
 
 public class JwtService {
 
@@ -59,10 +58,22 @@ public class JwtService {
 
     private RefreshToken generateRefreshToken(User user) {
         Instant expirationAt = Instant.now().plusMillis(refreshValidMillis);
+
+        Claims claims = Jwts.claims().
+                issuedAt(new Date()).
+                expiration(Date.from(expirationAt)).
+                add("account", user.getAccount()).
+                add("role", user.getRole()).
+                build();
+
+        String tokenStr = Jwts.
+                builder().
+                claims(claims).
+                signWith(secretKey).
+                compact();
+
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(user);
-
-        String tokenStr = UUID.randomUUID().toString();
         refreshToken.setToken(tokenStr);
         refreshToken.setExpirationDate(expirationAt);
         return refreshTokenRepo.save(refreshToken);
