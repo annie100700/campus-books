@@ -27,7 +27,7 @@ public class BookController {
 
     @PostMapping("/")
     public ResponseEntity<?> addBook(@AuthenticationPrincipal User user,
-                                     @RequestPart AddBookRequest addBookRequest, @RequestPart MultipartFile imageFile) {
+                                     @RequestPart AddBookRequest addBookRequest, @RequestPart(required = false) MultipartFile imageFile) {
         if (addBookRequest.isNullOrBlank()) {
             return new ResponseEntity<>("Name, author and publisher is required field", HttpStatus.BAD_REQUEST);
         }
