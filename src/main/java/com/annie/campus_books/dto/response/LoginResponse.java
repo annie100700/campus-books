@@ -14,7 +14,7 @@ public record LoginResponse(String accessToken, String refreshToken,
 
     public LoginResponse(GenerateTokenResponse generateTokenResponse, User user) {
         this(generateTokenResponse.accessToken(),
-                generateTokenResponse.refreshToken().getToken(),
+                generateTokenResponse.refreshToken(),
                 user.getAccount(),
                 user.getAuthorities(),
                 generateTokenResponse.accessTokenExpiration(),
