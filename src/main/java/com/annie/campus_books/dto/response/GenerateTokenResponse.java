@@ -8,4 +8,13 @@ import java.time.Instant;
 public record GenerateTokenResponse(String accessToken, Instant accessTokenExpiration,
                                     String refreshToken, Instant refreshTokenExpiration,
                                     String account, User.Role role) {
+    public GenerateTokenResponse(String accessToken, Instant accessTokenExpiration, RefreshToken refreshToken) {
+        this(accessToken,
+                accessTokenExpiration,
+                refreshToken.getToken(),
+                refreshToken.getExpirationDate(),
+                refreshToken.getUser().getAccount(),
+                refreshToken.getUser().getRole());
+
+    }
 }
