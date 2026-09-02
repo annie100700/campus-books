@@ -6,11 +6,10 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.time.Instant;
 import java.util.Collection;
-import java.util.Date;
 
 public record LoginResponse(String accessToken, String refreshToken,
                             String account, Collection<? extends GrantedAuthority> role,
-                            Date accessTokenExpiration,
+                            Instant accessTokenExpiration,
                             Instant refreshTokenExpiration) {
 
     public LoginResponse(GenerateTokenResponse generateTokenResponse, User user) {
@@ -19,7 +18,7 @@ public record LoginResponse(String accessToken, String refreshToken,
                 user.getAccount(),
                 user.getAuthorities(),
                 generateTokenResponse.accessTokenExpiration(),
-                generateTokenResponse.refreshToken().getExpirationDate());
+                generateTokenResponse.refreshTokenExpiration());
     }
 
 }

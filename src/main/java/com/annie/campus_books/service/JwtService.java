@@ -23,26 +23,26 @@ import java.util.UUID;
 public class JwtService {
 
     private final SecretKey secretKey;
-    private final int accessValidSeconds;
+    private final long accessValidMillis;
     private final JwtParser jwtParser;
 
-    private final int refreshValidSecond;
+    private final long refreshValidMillis;
     @Autowired
     private RefreshTokenRepo refreshTokenRepo;
 
-    public JwtService(String secretKeyStr, int accessValidSeconds, int refreshValidSecond) {
+    public JwtService(String secretKeyStr, long accessValidMillis, long refreshValidMillis) {
         this.secretKey = Keys.hmacShaKeyFor(secretKeyStr.getBytes());
-        this.accessValidSeconds = accessValidSeconds;
+        this.accessValidMillis = accessValidMillis;
         this.jwtParser = Jwts.parser().verifyWith(secretKey).build();
-        this.refreshValidSecond = refreshValidSecond;
+        this.refreshValidMillis = refreshValidMillis;
     }
 
     public GenerateTokenResponse generateToken(User user) {
-        Date expirationAt = new Date(Instant.now().plusSeconds(accessValidSeconds).getEpochSecond() * 1000);
+        Instant expirationAt = Instant.now().plusMillis(accessValidMillis);
 
         Claims claims = Jwts.claims().
                 issuedAt(new Date()).
-                expiration(expirationAt).
+                expiration(Date.from(expirationAt)).
                 add("account", user.getAccount()).
                 add("role", user.getRole()).
                 build();
@@ -58,13 +58,12 @@ public class JwtService {
     }
 
     private RefreshToken generateRefreshToken(User user) {
+        Instant expirationAt = Instant.now().plusMillis(refreshValidMillis);
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(user);
 
         String tokenStr = UUID.randomUUID().toString();
         refreshToken.setToken(tokenStr);
-
-        Instant expirationAt = Instant.now().plusSeconds(refreshValidSecond);
         refreshToken.setExpirationDate(expirationAt);
         return refreshTokenRepo.save(refreshToken);
     }
