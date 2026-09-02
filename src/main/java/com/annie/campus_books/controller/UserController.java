@@ -69,11 +69,11 @@ public class UserController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<GenerateTokenResponse> refresh(@RequestBody RefreshRequest refreshRequest) {
-        RefreshToken refreshToken = jwtService.getRefreshToken(refreshRequest.refreshToken());
+    public ResponseEntity<GenerateTokenResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        RefreshToken refreshToken = jwtService.getRefreshToken(refreshTokenRequest.refreshToken());
         if (refreshToken != null) {
             if (refreshToken.isExpired()) {
-                jwtService.deleteByToken(refreshRequest.refreshToken());
+                jwtService.deleteByToken(refreshTokenRequest.refreshToken());
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             GenerateTokenResponse generateTokenResponse = jwtService.refreshToken(refreshToken);
