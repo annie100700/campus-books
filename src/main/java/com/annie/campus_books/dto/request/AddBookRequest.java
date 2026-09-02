@@ -20,4 +20,8 @@ public record AddBookRequest(String name, String author, String publisher,
         );
     }
 
+    public boolean isNullOrBlank() {
+        return name == null || author == null || publisher == null || sellingPrice == null ||
+                name.isBlank() || author.isBlank() || publisher.isBlank();
+    }
 }
