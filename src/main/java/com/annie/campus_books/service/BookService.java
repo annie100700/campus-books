@@ -76,17 +76,16 @@ public class BookService {
 
     public Book updateBook(Book book, UpdateBookRequest updateBookRequest,
                            MultipartFile imageFile) throws IOException {
-        if (updateBookRequest.name() != null) {
-            book.setName(updateBookRequest.name());
-        }
-        if (updateBookRequest.author() != null) {
-            book.setAuthor(updateBookRequest.author());
-        }
-        if (updateBookRequest.publisher() != null) {
-            book.setPublisher(updateBookRequest.publisher());
-        }
         if (updateBookRequest != null) {
-        if (updateBookRequest != null) {
+            if (updateBookRequest.name() != null) {
+                book.setName(updateBookRequest.name());
+            }
+            if (updateBookRequest.author() != null) {
+                book.setAuthor(updateBookRequest.author());
+            }
+            if (updateBookRequest.publisher() != null) {
+                book.setPublisher(updateBookRequest.publisher());
+            }
             if (updateBookRequest.version() != null) {
                 book.setVersion(updateBookRequest.version());
             }
@@ -101,7 +100,7 @@ public class BookService {
             book.setSellingPrice(updateBookRequest.sellingPrice());
         }
 
-        if (imageFile != null && imageFile.isEmpty()) {
+        if (imageFile != null && !imageFile.isEmpty()) {
             book.setImageName(imageFile.getOriginalFilename());
             book.setImageType(imageFile.getContentType());
             book.setImageData(imageFile.getBytes());
