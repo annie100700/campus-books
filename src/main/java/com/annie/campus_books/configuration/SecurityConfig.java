@@ -44,6 +44,7 @@ public class SecurityConfig {
                                 requestMatchers(builder.matcher(HttpMethod.GET, "/books/**")).permitAll().
                         requestMatchers(builder.matcher(HttpMethod.POST, "/users/register")).permitAll().
                         requestMatchers(builder.matcher(HttpMethod.POST, "/users/login")).permitAll().
+                        requestMatchers(builder.matcher(HttpMethod.POST, "/users/refresh")).permitAll().
                         // hasAuthority
                                 requestMatchers(builder.matcher(HttpMethod.GET, "/users/")).hasAuthority("ADMIN").
                         requestMatchers(builder.matcher(HttpMethod.GET, "/users/*?/**")).hasAuthority("ADMIN").
