@@ -73,7 +73,7 @@ public class UserController {
         RefreshToken refreshToken = jwtService.getRefreshToken(refreshTokenRequest.refreshToken());
         if (refreshToken != null) {
             if (refreshToken.isExpired()) {
-                jwtService.deleteByToken(refreshTokenRequest.refreshToken());
+                jwtService.deleteRefreshToken(refreshToken);
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             GenerateTokenResponse generateTokenResponse = jwtService.refreshToken(refreshToken);
@@ -88,7 +88,7 @@ public class UserController {
         if (refreshToken != null) {
             String tokenOwner = refreshToken.getUser().getAccount();
             if (user.getAccount().equals(tokenOwner) || user.isAdmin()) {
-                jwtService.deleteByToken(refreshTokenRequest.refreshToken());
+                jwtService.deleteRefreshToken(refreshToken);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);

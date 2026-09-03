@@ -94,9 +94,8 @@ public class JwtService {
         return refreshTokenRepo.findByToken(RefreshTokenStr).orElse(null);
     }
 
-    @Transactional
-    public void deleteByToken(String refreshTokenStr) {
-        refreshTokenRepo.deleteByToken(refreshTokenStr);
+    public void deleteRefreshToken(RefreshToken refreshToken) {
+        refreshTokenRepo.delete(refreshToken);
     }
 
 }
