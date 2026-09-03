@@ -34,7 +34,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             basePath("/api.campus-books.com");
     private static final List<RequestMatcher> EXCLUDE_PATH = List.of(
             builder.matcher(HttpMethod.GET, "/books/**"),
-            builder.matcher(HttpMethod.POST, "/users/*?")
+            builder.matcher(HttpMethod.POST, "/users/register"),
+            builder.matcher(HttpMethod.POST, "/users/login"),
+            builder.matcher(HttpMethod.POST, "/users/refresh")
     );
 
     @Autowired
