@@ -69,11 +69,11 @@ public class UserController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<GenerateTokenResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-        RefreshToken refreshToken = jwtService.getRefreshToken(refreshTokenRequest.refreshToken());
+    public ResponseEntity<GenerateTokenResponse> refresh(@RequestBody String refreshTokenStr) {
+        RefreshToken refreshToken = jwtService.getRefreshToken(refreshTokenStr);
         if (refreshToken != null) {
             if (refreshToken.isExpired()) {
-                jwtService.deleteByToken(refreshTokenRequest.refreshToken());
+                jwtService.deleteByToken(refreshTokenStr);
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             GenerateTokenResponse generateTokenResponse = jwtService.refreshToken(refreshToken);
@@ -83,12 +83,12 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<HttpStatus> logout(@AuthenticationPrincipal User user, @RequestBody RefreshTokenRequest refreshTokenRequest) {
-        RefreshToken refreshToken = jwtService.getRefreshToken(refreshTokenRequest.refreshToken());
+    public ResponseEntity<HttpStatus> logout(@AuthenticationPrincipal User user, @RequestBody String refreshTokenStr) {
+        RefreshToken refreshToken = jwtService.getRefreshToken(refreshTokenStr);
         if (refreshToken != null) {
             String tokenOwner = refreshToken.getUser().getAccount();
             if (user.getAccount().equals(tokenOwner) || user.isAdmin()) {
-                jwtService.deleteByToken(refreshTokenRequest.refreshToken());
+                jwtService.deleteByToken(refreshTokenStr);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
