@@ -85,6 +85,8 @@ public class BookService {
         if (updateBookRequest.publisher() != null) {
             book.setPublisher(updateBookRequest.publisher());
         }
+        if (updateBookRequest != null) {
+        if (updateBookRequest != null) {
 
         BookCondition bookCondition = updateBookCondition(book, updateBookRequest);
         book.setBookCondition(bookCondition);

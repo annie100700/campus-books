@@ -72,11 +72,15 @@ public class BookController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateBook(@AuthenticationPrincipal User user, @PathVariable UUID id,
-                                        @RequestPart UpdateBookRequest updateBookRequest,
+                                        @RequestPart(required = false) UpdateBookRequest updateBookRequest,
                                         @RequestPart(required = false) MultipartFile imageFile) {
         Book book = bookService.getBookById(id);
         if (book != null) {
             if (user.equals(book.getSeller()) || user.isAdmin()) {
+                if (updateBookRequest == null&&
+                        (imageFile==null||imageFile.isEmpty())) {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
                 try {
                     Book updatedBook = bookService.updateBook(book, updateBookRequest, imageFile);
                     return new ResponseEntity<>(updatedBook, HttpStatus.OK);
