@@ -90,14 +90,15 @@ public class BookService {
                 book.setVersion(updateBookRequest.version());
             }
 
-        BookCondition bookCondition = updateBookCondition(book, updateBookRequest);
-        book.setBookCondition(bookCondition);
+            BookCondition bookCondition = updateBookCondition(book, updateBookRequest);
+            book.setBookCondition(bookCondition);
 
-        if (updateBookRequest.listPrice() != null) {
-            book.setListPrice(updateBookRequest.listPrice());
-        }
-        if (updateBookRequest.sellingPrice() != null) {
-            book.setSellingPrice(updateBookRequest.sellingPrice());
+            if (updateBookRequest.listPrice() != null) {
+                book.setListPrice(updateBookRequest.listPrice());
+            }
+            if (updateBookRequest.sellingPrice() != null) {
+                book.setSellingPrice(updateBookRequest.sellingPrice());
+            }
         }
 
         if (imageFile != null && !imageFile.isEmpty()) {
