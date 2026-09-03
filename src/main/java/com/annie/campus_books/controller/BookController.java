@@ -76,7 +76,8 @@ public class BookController {
                                         @RequestPart(required = false) MultipartFile imageFile) {
         Book book = bookService.getBookById(id);
         if (book != null) {
-            if (user.equals(book.getSeller()) || user.isAdmin()) {
+            String sellerAccount=book.getSeller().getAccount();
+            if (user.getAccount().equals(sellerAccount) || user.isAdmin()) {
                 if (updateBookRequest == null&&
                         (imageFile==null||imageFile.isEmpty())) {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -99,7 +100,8 @@ public class BookController {
     public ResponseEntity<String> deleteBookById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
         Book book = bookService.getBookById(id);
         if (book != null) {
-            if (user.equals(book.getSeller()) || user.isAdmin()) {
+            String sellerAccount=book.getSeller().getAccount();
+            if (user.getAccount().equals(sellerAccount) || user.isAdmin()) {
                 bookService.deleteBook(book);
                 return new ResponseEntity<>("deleted", HttpStatus.NO_CONTENT);
             } else {
