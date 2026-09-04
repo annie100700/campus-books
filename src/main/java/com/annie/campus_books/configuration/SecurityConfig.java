@@ -47,10 +47,7 @@ public class SecurityConfig {
                         requestMatchers(builder.matcher(HttpMethod.POST, "/users/refresh")).permitAll().
                         // hasAuthority
                                 requestMatchers(builder.matcher(HttpMethod.GET, "/users/")).hasAuthority("ADMIN").
-                        requestMatchers(builder.matcher(HttpMethod.GET, "/users/*?/**")).hasAuthority("ADMIN").
-                        requestMatchers(builder.matcher(HttpMethod.PATCH, "/users/*?")).hasAuthority("ADMIN").
-                        requestMatchers(builder.matcher(HttpMethod.PATCH, "/users/current-user/password")).hasAuthority("USER").
-                        requestMatchers(builder.matcher(HttpMethod.DELETE, "/users/*?")).hasAuthority("ADMIN").
+                        requestMatchers(builder.matcher(HttpMethod.PATCH, "/users/current/password")).hasAuthority("USER").
                         requestMatchers(builder.matcher(HttpMethod.GET, "/orders/")).hasAuthority("ADMIN").
                         // authenticated
                                 anyRequest().authenticated()).
