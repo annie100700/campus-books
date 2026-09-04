@@ -101,7 +101,7 @@ public class BookService {
             }
         }
 
-        if (imageFile != null && !imageFile.isEmpty()) {
+        if (imageFile != null) {
             book.setImageName(imageFile.getOriginalFilename());
             book.setImageType(imageFile.getContentType());
             book.setImageData(imageFile.getBytes());

@@ -78,8 +78,7 @@ public class BookController {
         if (book != null) {
             String sellerAccount=book.getSeller().getAccount();
             if (user.getAccount().equals(sellerAccount) || user.isAdmin()) {
-                if (updateBookRequest == null&&
-                        (imageFile==null||imageFile.isEmpty())) {
+                if (updateBookRequest == null && imageFile == null) {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
                 try {
