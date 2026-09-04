@@ -98,4 +98,8 @@ public class JwtService {
         refreshTokenRepo.delete(refreshToken);
     }
 
+    @Transactional
+    public void deleteTokenByUser(User user) {
+        refreshTokenRepo.deleteAllByUser(user);
+    }
 }
