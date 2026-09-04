@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
 
     public void changePassword(User user, ChangePasswordRequest changePasswordRequest) {
         String encodedNewPassword = passwordEncoder.encode(changePasswordRequest.newPassword());
-        user.setPassword(passwordEncoder.encode(encodedNewPassword));
+        user.setPassword(encodedNewPassword);
         repo.save(user);
     }
 
