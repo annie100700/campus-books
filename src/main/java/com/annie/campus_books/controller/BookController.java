@@ -111,4 +111,20 @@ public class BookController {
         }
     }
 
+    @DeleteMapping("/{id}/image")
+    public ResponseEntity<String> deleteBookImageById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
+        Book book = bookService.getBookById(id);
+        if (book != null) {
+            String sellerAccount = book.getSeller().getAccount();
+            if (user.getAccount().equals(sellerAccount) || user.isAdmin()) {
+                bookService.deleteBookImage(book);
+                return new ResponseEntity<>("deleted", HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
