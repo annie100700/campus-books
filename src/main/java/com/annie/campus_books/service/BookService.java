@@ -141,4 +141,12 @@ public class BookService {
         repo.save(book);
     }
 
+    public void deleteBookImage(Book book) {
+        book.setImageName(null);
+        book.setImageType(null);
+        book.setImageData(null);
+        repo.save(book);
+
+    }
+
 }
