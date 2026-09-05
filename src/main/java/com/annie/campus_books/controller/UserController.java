@@ -234,19 +234,23 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PatchMapping("/currrnt/password")
-    public ResponseEntity<String> changePassword(@AuthenticationPrincipal User user,
+    @PatchMapping("/current/password")
+    public ResponseEntity<String> changePassword(@AuthenticationPrincipal User current,
                                                  @RequestBody ChangePasswordRequest changePasswordRequest) {
-        if (userService.isPasswordMatch(changePasswordRequest.oldPassword(), user.getPassword())) {
-            return new ResponseEntity<>("Password incorrect", HttpStatus.BAD_REQUEST);
-        } else if (!changePasswordRequest.newPassword().equals(changePasswordRequest.confirmNewPassword())) {
-            return new ResponseEntity<>("New password doesn't match", HttpStatus.BAD_REQUEST);
+        User user = userService.getUserByAccount(current.getAccount());
+        if (!user.isDeleted()) {
+            if (!userService.isPasswordMatch(changePasswordRequest.oldPassword(), user.getPassword())) {
+                return new ResponseEntity<>("Password incorrect", HttpStatus.BAD_REQUEST);
+            }
+            if (!changePasswordRequest.newPassword().equals(changePasswordRequest.confirmNewPassword())) {
+                return new ResponseEntity<>("New password doesn't match", HttpStatus.BAD_REQUEST);
+            } else if (changePasswordRequest.oldPassword().equals(changePasswordRequest.newPassword())) {
+                return new ResponseEntity<>("Password couldn't be same", HttpStatus.BAD_REQUEST);
+            }
+            userService.changePassword(user, changePasswordRequest);
+            return new ResponseEntity<>("Password changed", HttpStatus.OK);
         }
-        if (changePasswordRequest.oldPassword().equals(changePasswordRequest.newPassword())) {
-            return new ResponseEntity<>("Password couldn't be same", HttpStatus.BAD_REQUEST);
-        }
-        userService.changePassword(user, changePasswordRequest);
-        return new ResponseEntity<>("Password changed", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     //resetPassword
