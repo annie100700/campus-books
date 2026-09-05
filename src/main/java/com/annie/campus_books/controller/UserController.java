@@ -170,14 +170,6 @@ public class UserController {
         return new ResponseEntity<>("User doesn't exist", HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/current/orders/purchase/{status}")
-    public ResponseEntity<?> getPurchasesOfCurrentUserByStatus(@AuthenticationPrincipal User user,
-                                                               @PathVariable UserOrder.Status status) {
-        String account = user.getAccount();
-        List<UserOrder> orders = orderService.getPurchasesByUserAndStatus(account, status);
-        return new ResponseEntity<>(orders, HttpStatus.OK);
-    }
-
     @GetMapping("/current/orders/sell/{status}")
     public ResponseEntity<?> getSellsOfCurrentUserByStatus(@AuthenticationPrincipal User user,
                                                            @PathVariable UserOrder.Status status) {
@@ -186,11 +178,26 @@ public class UserController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    //admin用
     @GetMapping("/{account}/orders/purchase/{status}")
-    public ResponseEntity<?> getPurchasesByUserAndStatus(@PathVariable String account, @PathVariable UserOrder.Status status) {
-        List<UserOrder> orders = orderService.getPurchasesByUserAndStatus(account, status);
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+    public ResponseEntity<?> getPurchasesByUserAndStatus(@AuthenticationPrincipal User current,
+                                                         @PathVariable String account,
+                                                         @PathVariable String status) {
+        User user = userService.getUserByAccount(account);
+        UserOrder.Status orderStatus;
+        if (user != null) {
+            if (orderService.isStatusLegal(status)) {
+                orderStatus = UserOrder.Status.valueOf(status);
+            } else {
+                return new ResponseEntity<>("status should be IN_PROGRESS, COMPLETED or CANCELED", HttpStatus.BAD_REQUEST);
+            }
+            if (current.getAccount().equals(account) && !user.isDeleted() ||
+                    current.isAdmin()) {
+                List<UserOrder> orders = orderService.getPurchasesByUserAndStatus(account, orderStatus);
+                return new ResponseEntity<>(orders, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>("User doesn't exist", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{account}/orders/sell")
