@@ -118,11 +118,18 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/current/books")
-    public ResponseEntity<?> getBooksOfCurrentUser(@AuthenticationPrincipal User user) {
-        String account = user.getAccount();
-        List<Book> books = bookService.getBooksByUser(account);
-        return new ResponseEntity<>(books, HttpStatus.OK);
+    @GetMapping("/{account}/books")
+    public ResponseEntity<?> getBooksByUser(@AuthenticationPrincipal User current, @PathVariable String account) {
+        User user = userService.getUserByAccount(account);
+        if (user != null && !user.isDeleted()) {
+            if (current.getAccount().equals(account) || current.isAdmin()) {
+                List<Book> books = bookService.getBooksByUser(account);
+                return new ResponseEntity<>(books, HttpStatus.OK);
+            }
+            List<Book> books = bookService.getBooksByUserAndStatus(account, Book.Status.FOR_SALE);
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("User doesn't exist", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/current/books/{status}")
@@ -130,13 +137,6 @@ public class UserController {
                                                            @PathVariable Book.Status status) {
         String account = user.getAccount();
         List<Book> books = bookService.getBooksByUserAndStatus(account, status);
-        return new ResponseEntity<>(books, HttpStatus.OK);
-    }
-
-    //admin用
-    @GetMapping("/{account}/books")
-    public ResponseEntity<?> getBooksByUser(@PathVariable String account) {
-        List<Book> books = bookService.getBooksByUser(account);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
