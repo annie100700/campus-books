@@ -214,21 +214,20 @@ public class UserController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    @PatchMapping("/current")
-    public ResponseEntity<?> updateCurrentUser(@AuthenticationPrincipal User user,
-                                               @RequestBody UpdateUserRequest updateUserRequest) {
-        User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    //admin用
     @PatchMapping("/{account}")
-    public ResponseEntity<?> updateUserByAccount(@PathVariable String account,
+    public ResponseEntity<?> updateUserByAccount(@AuthenticationPrincipal User current,
+                                                 @PathVariable String account,
                                                  @RequestBody UpdateUserRequest updateUserRequest) {
         User user = userService.getUserByAccount(account);
         if (user != null) {
-            User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+            if (current.getAccount().equals(account) && !user.isDeleted() ||
+                    current.isAdmin()) {
+                User updatedUser = userService.updateUserByAccount(user, updateUserRequest);
+                return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
