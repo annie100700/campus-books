@@ -132,19 +132,29 @@ public class UserController {
         return new ResponseEntity<>("User doesn't exist", HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/current/books/{status}")
-    public ResponseEntity<?> getBooksOfCurrentUserByStatus(@AuthenticationPrincipal User user,
-                                                           @PathVariable Book.Status status) {
-        String account = user.getAccount();
-        List<Book> books = bookService.getBooksByUserAndStatus(account, status);
-        return new ResponseEntity<>(books, HttpStatus.OK);
-    }
-
-    //admin用
     @GetMapping("/{account}/books/{status}")
-    public ResponseEntity<?> getBooksByUserAndStatus(@PathVariable String user, @PathVariable Book.Status status) {
-        List<Book> books = bookService.getBooksByUserAndStatus(user, status);
-        return new ResponseEntity<>(books, HttpStatus.OK);
+    public ResponseEntity<?> getBooksByUserAndStatus(@AuthenticationPrincipal User current,
+                                                     @PathVariable String account,
+                                                     @PathVariable String status) {
+        User user = userService.getUserByAccount(account);
+        Book.Status bookStatus;
+        if (user != null && !user.isDeleted()) {
+            if (bookService.isStatusLegal(status)) {
+                bookStatus = Book.Status.valueOf(status);
+            } else {
+                return new ResponseEntity<>("status should be FOR_SALE, SOLD_OUT or REMOVED", HttpStatus.BAD_REQUEST);
+            }
+            if (current.getAccount().equals(account) ||
+                    current.isAdmin()) {
+                List<Book> books = bookService.getBooksByUserAndStatus(account, bookStatus);
+                return new ResponseEntity<>(books, HttpStatus.OK);
+            } else if (bookStatus.equals(Book.Status.FOR_SALE)) {
+                List<Book> books = bookService.getBooksByUserAndStatus(account, bookStatus);
+                return new ResponseEntity<>(books, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>("User doesn't exist", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/current/orders/purchase")
