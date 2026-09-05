@@ -253,19 +253,18 @@ public class UserController {
 
     //resetPassword
 
-    @DeleteMapping("/current")
-    public ResponseEntity<String> deleteCurrentUser(@AuthenticationPrincipal User user) {
-        userService.deleteUser(user);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    //admin用
     @DeleteMapping("/{account}")
-    public ResponseEntity<String> deleteUserByAccount(@PathVariable String account) {
+    public ResponseEntity<String> deleteUserByAccount(@AuthenticationPrincipal User current,
+                                                      @PathVariable String account) {
         User user = userService.getUserByAccount(account);
         if (user != null) {
-            userService.deleteUser(user);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            if (current.getAccount().equals(account) && !user.isDeleted()
+                    || current.isAdmin()) {
+                jwtService.deleteTokenByUser(user);
+                userService.deleteUser(user);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
