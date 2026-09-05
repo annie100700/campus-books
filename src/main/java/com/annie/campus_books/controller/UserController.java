@@ -57,15 +57,18 @@ public class UserController {
         User user = userService.getUserByAccount(loginRequest.account());
         boolean login;
         if (user != null) {
+            if (user.isDeleted()) {
+                return new ResponseEntity<>("Account has been deleted", HttpStatus.BAD_REQUEST);
+            }
             login = userService.login(user, loginRequest);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (login) {
+                GenerateTokenResponse jwt = jwtService.generateToken(user);
+                return new ResponseEntity<>(new LoginResponse(jwt, user), HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Incorrect password", HttpStatus.UNAUTHORIZED);
         }
-        if (login) {
-            GenerateTokenResponse jwt = jwtService.generateToken(user);
-            return new ResponseEntity<>(new LoginResponse(jwt, user), HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Incorrect password", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
     @PostMapping("/refresh")
