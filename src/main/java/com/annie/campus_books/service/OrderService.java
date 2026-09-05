@@ -80,4 +80,10 @@ public class OrderService {
         bookRepo.save(book);
     }
 
+    public boolean isStatusLegal(String status) {
+        return status.equals(String.valueOf(UserOrder.Status.IN_PROGRESS)) ||
+                status.equals(String.valueOf(UserOrder.Status.COMPLETED)) ||
+                status.equals(String.valueOf(UserOrder.Status.CANCELED));
+    }
+
 }

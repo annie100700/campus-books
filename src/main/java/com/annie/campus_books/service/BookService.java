@@ -149,4 +149,10 @@ public class BookService {
 
     }
 
+    public boolean isStatusLegal(String status) {
+        return status.equals(String.valueOf(Book.Status.FOR_SALE)) ||
+                status.equals(String.valueOf(Book.Status.SOLD_OUT)) ||
+                status.equals(String.valueOf(Book.Status.REMOVED));
+    }
+
 }
