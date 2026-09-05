@@ -156,11 +156,18 @@ public class UserController {
         return new ResponseEntity<>("User doesn't exist", HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/current/orders/purchase")
-    public ResponseEntity<?> getPurchasesOfCurrentUser(@AuthenticationPrincipal User user) {
-        String account = user.getAccount();
-        List<UserOrder> orders = orderService.getPurchasesByUser(account);
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+    @GetMapping("/{account}/orders/purchase")
+    public ResponseEntity<?> getPurchasesByUser(@AuthenticationPrincipal User current, @PathVariable String account) {
+        User user = userService.getUserByAccount(account);
+        if (user != null) {
+            if (current.getAccount().equals(account) && !user.isDeleted() ||
+                    current.isAdmin()) {
+                List<UserOrder> orders = orderService.getPurchasesByUser(account);
+                return new ResponseEntity<>(orders, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>("User doesn't exist", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/current/orders/purchase/{status}")
@@ -183,13 +190,6 @@ public class UserController {
                                                            @PathVariable UserOrder.Status status) {
         String account = user.getAccount();
         List<UserOrder> orders = orderService.getSellsByUserAndStatus(account, status);
-        return new ResponseEntity<>(orders, HttpStatus.OK);
-    }
-
-    //admin用
-    @GetMapping("/{account}/orders/purchase")
-    public ResponseEntity<?> getPurchasesByUser(@PathVariable String account) {
-        List<UserOrder> orders = orderService.getPurchasesByUser(account);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
