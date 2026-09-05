@@ -105,17 +105,16 @@ public class UserController {
     }
 
     @GetMapping("/{account}")
-    public ResponseEntity<User> getUserByAccount(@PathVariable String userAccount) {
-        User user = userService.getUserByAccount(userAccount);
+    public ResponseEntity<User> getUserByAccount(@AuthenticationPrincipal User current, @PathVariable String account) {
+        User user = userService.getUserByAccount(account);
         if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            if (current.getAccount().equals(account) && !user.isDeleted()
+                    || current.isAdmin()) {
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/current")
-    public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal User user) {
-        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/{account}/books")
