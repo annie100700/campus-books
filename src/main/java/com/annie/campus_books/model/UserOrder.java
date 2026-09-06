@@ -39,6 +39,7 @@ public class UserOrder {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public enum Status {
