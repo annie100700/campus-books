@@ -1,5 +1,6 @@
 package com.annie.campus_books.controller;
 
+import com.annie.campus_books.dto.request.CreateOrderRequest;
 import com.annie.campus_books.model.Book;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.model.UserOrder;
@@ -27,16 +28,25 @@ public class OrderController {
     private BookService bookService;
 
     @PostMapping("/")
-    public ResponseEntity<?> createOrder(@AuthenticationPrincipal User buyer, @RequestBody UUID bookId) {
-        Book book = bookService.getBookById(bookId);
-        String sellerAccount = book.getSeller().getAccount();
-        if (buyer.getAccount().equals(sellerAccount)) {
-            return new ResponseEntity<>("Can not buy your own book", HttpStatus.BAD_REQUEST);
-        } else if (book.getStatus().equals(Book.Status.SOLD_OUT)) {
-            return new ResponseEntity<>("This book already sold out", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> createOrder(@AuthenticationPrincipal User buyer,
+                                         @RequestBody CreateOrderRequest createOrderRequest) {
+        try {
+            UUID bookId = UUID.fromString(createOrderRequest.bookId());
+            Book book = bookService.getBookById(bookId);
+            if (book != null) {
+                String sellerAccount = book.getSeller().getAccount();
+                if (buyer.getAccount().equals(sellerAccount)) {
+                    return new ResponseEntity<>("Can not buy your own book", HttpStatus.BAD_REQUEST);
+                } else if (book.getStatus().equals(Book.Status.SOLD_OUT)) {
+                    return new ResponseEntity<>("This book already sold out", HttpStatus.BAD_REQUEST);
+                }
+                UserOrder userOrder = orderService.createOrder(book, buyer);
+                return new ResponseEntity<>(userOrder, HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>("Book id doesn't exist ", HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>("Book id is not legal", HttpStatus.BAD_REQUEST);
         }
-        UserOrder userOrder = orderService.createOrder(book, buyer);
-        return new ResponseEntity<>(userOrder, HttpStatus.CREATED);
     }
 
     @GetMapping("/")
