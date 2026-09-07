@@ -48,7 +48,7 @@ public class SecurityConfig {
                         // hasAuthority
                                 requestMatchers(builder.matcher(HttpMethod.GET, "/users/")).hasAuthority("ADMIN").
                         requestMatchers(builder.matcher(HttpMethod.PATCH, "/users/current/password")).hasAuthority("USER").
-                        requestMatchers(builder.matcher(HttpMethod.GET, "/orders/")).hasAuthority("ADMIN").
+                        requestMatchers(builder.matcher(HttpMethod.GET, "/orders/*")).hasAuthority("ADMIN").
                         // authenticated
                                 anyRequest().authenticated()).
                 sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
