@@ -56,17 +56,17 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserOrder> getOrderById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
-        UserOrder order = orderService.getOrderById(id);
-        if (order != null) {
-            if (user.getAccount().equals(order.getBuyer().getAccount()) ||
-                    user.getAccount().equals(order.getSeller().getAccount()) ||
-                    user.isAdmin()) {
+    public ResponseEntity<?> getOrderById(@PathVariable String id) {
+        try {
+            UUID orderId = UUID.fromString(id);
+            UserOrder order = orderService.getOrderById(orderId);
+            if (order != null) {
                 return new ResponseEntity<>(order, HttpStatus.OK);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>("id is not legal", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping("/{id}/status/complete")
