@@ -70,16 +70,21 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}/status/complete")
-    public ResponseEntity<String> completeOrderById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
-        UserOrder order = orderService.getOrderById(id);
-        if (order != null) {
-            if (user.getAccount().equals(order.getBuyer().getAccount()) || user.isAdmin()) {
-                orderService.completeOrder(order);
-                return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<String> completeOrderById(@AuthenticationPrincipal User user, @PathVariable String id) {
+        try {
+            UUID orderId = UUID.fromString(id);
+            UserOrder order = orderService.getOrderById(orderId);
+            if (order != null) {
+                if (user.getAccount().equals(order.getBuyer().getAccount()) || user.isAdmin()) {
+                    orderService.completeOrder(order);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>("id is not legal", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping("/{id}/status/cancel")
