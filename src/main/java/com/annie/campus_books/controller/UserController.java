@@ -257,7 +257,7 @@ public class UserController {
             } else if (changePasswordRequest.oldPassword().equals(changePasswordRequest.newPassword())) {
                 return new ResponseEntity<>("Password couldn't be same", HttpStatus.BAD_REQUEST);
             }
-            userService.changePassword(user, changePasswordRequest);
+            userService.changePassword(user, changePasswordRequest.newPassword());
             return new ResponseEntity<>("Password changed", HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);

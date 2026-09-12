@@ -1,6 +1,5 @@
 package com.annie.campus_books.service;
 
-import com.annie.campus_books.dto.request.ChangePasswordRequest;
 import com.annie.campus_books.dto.request.LoginRequest;
 import com.annie.campus_books.dto.request.RegisterRequest;
 import com.annie.campus_books.dto.request.UpdateUserRequest;
@@ -84,8 +83,8 @@ public class UserService implements UserDetailsService {
         return repo.save(user);
     }
 
-    public void changePassword(User user, ChangePasswordRequest changePasswordRequest) {
-        String encodedNewPassword = passwordEncoder.encode(changePasswordRequest.newPassword());
+    public void changePassword(User user, String newPassword) {
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedNewPassword);
         repo.save(user);
     }
