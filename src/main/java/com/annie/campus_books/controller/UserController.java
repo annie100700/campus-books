@@ -264,6 +264,20 @@ public class UserController {
     }
 
     //resetPassword
+    @PostMapping("/forget-password")
+    public ResponseEntity<?> forgetPassword(@RequestBody String email) {
+        User user = userService.getUserByEmail(email);
+        if (user != null) {
+            if (!user.isDeleted()) {
+                PasswordResetToken passwordResetToken = jwtService.generatePasswordResetToken(user);
+                userService.sendResetPasswordEmail(user, passwordResetToken);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 
     @DeleteMapping("/{account}")
     public ResponseEntity<String> deleteUserByAccount(@AuthenticationPrincipal User current,
