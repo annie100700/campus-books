@@ -89,4 +89,8 @@ public class UserService implements UserDetailsService {
                 orElseThrow(() -> new UsernameNotFoundException("User " + account + " is not found"));
     }
 
+    public User getUserByEmail(String email) {
+        return repo.findByEmail(email).orElse(null);
+    }
+
 }
