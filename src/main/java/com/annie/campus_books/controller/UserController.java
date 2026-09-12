@@ -299,7 +299,7 @@ public class UserController {
         if (user != null) {
             if (current.getAccount().equals(account) && !user.isDeleted()
                     || current.isAdmin()) {
-                jwtService.deleteTokenByUser(user);
+                jwtService.deleteAllTokensByUser(user);
                 userService.deleteUser(user);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

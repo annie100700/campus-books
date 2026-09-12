@@ -106,7 +106,7 @@ public class JwtService {
     }
 
     @Transactional
-    public void deleteTokenByUser(User user) {
+    public void deleteAllTokensByUser(User user) {
         refreshTokenRepo.deleteAllByUser(user);
     }
 
