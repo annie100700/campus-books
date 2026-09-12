@@ -46,6 +46,8 @@ public class SecurityConfig {
                         requestMatchers(builder.matcher(HttpMethod.POST, "/users/register")).permitAll().
                         requestMatchers(builder.matcher(HttpMethod.POST, "/users/login")).permitAll().
                         requestMatchers(builder.matcher(HttpMethod.POST, "/users/refresh")).permitAll().
+                        requestMatchers(builder.matcher(HttpMethod.POST, "/users/forget-password")).permitAll().
+                        requestMatchers(builder.matcher(HttpMethod.POST, "/users/reset-password")).permitAll().
                         // hasAuthority
                                 requestMatchers(builder.matcher(HttpMethod.GET, "/users/")).hasAuthority("ADMIN").
                         requestMatchers(builder.matcher(HttpMethod.PATCH, "/users/current/password")).hasAuthority("USER").
