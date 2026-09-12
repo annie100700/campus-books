@@ -4,10 +4,17 @@ import com.annie.campus_books.dto.request.ChangePasswordRequest;
 import com.annie.campus_books.dto.request.LoginRequest;
 import com.annie.campus_books.dto.request.RegisterRequest;
 import com.annie.campus_books.dto.request.UpdateUserRequest;
+import com.annie.campus_books.model.PasswordResetToken;
 import com.annie.campus_books.model.User;
 import com.annie.campus_books.repository.UserRepo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +31,11 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public User register(RegisterRequest registerRequest) {
         String encodedPassword = passwordEncoder.encode(registerRequest.password());
@@ -91,6 +103,24 @@ public class UserService implements UserDetailsService {
 
     public User getUserByEmail(String email) {
         return repo.findByEmail(email).orElse(null);
+    }
+
+    @Async
+    public void sendResetPasswordEmail(User user, PasswordResetToken passwordResetToken) {
+        try {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setFrom("campusBooks@gmail.com");
+            simpleMailMessage.setTo(user.getEmail());
+            simpleMailMessage.setSubject("Please verify your email to reset password");
+
+            String url = "http://localhost:8080/api.campus-books.com/users/reset-password?token=" + passwordResetToken.getToken();
+            String text = String.format("Click here to reset your password, this links will expired in 10 minutes: %s", url);
+
+            simpleMailMessage.setText(text);
+            mailSender.send(simpleMailMessage);
+        } catch (MailException e) {
+            logger.error(user.getEmail(), e);
+        }
     }
 
 }
