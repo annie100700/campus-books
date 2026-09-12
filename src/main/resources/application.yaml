@@ -24,3 +24,4 @@ jwt:
   secret-key: ${SECRET_KEY}
   access-valid-millis: 600000
   refresh-valid-millis: 3600000
+  password-reset-valid-millis: 900000
