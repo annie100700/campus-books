@@ -263,7 +263,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
-    //resetPassword
     @PostMapping("/forget-password")
     public ResponseEntity<?> forgetPassword(@RequestBody String email) {
         User user = userService.getUserByEmail(email);
@@ -278,6 +277,20 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+        PasswordResetToken passwordResetToken = jwtService.getPasswordResetToken(resetPasswordRequest.passwordResetToken());
+        if (passwordResetToken != null && !passwordResetToken.isExpired()) {
+            User user = passwordResetToken.getUser();
+            if (resetPasswordRequest.newPassword().equals(resetPasswordRequest.confirmPassword())) {
+                userService.changePassword(user, resetPasswordRequest.newPassword());
+                jwtService.deleteResetPasswordToken(passwordResetToken);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>("New password do not match", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Token doesn't exist or already expired, please try again", HttpStatus.BAD_REQUEST);
+    }
 
     @DeleteMapping("/{account}")
     public ResponseEntity<String> deleteUserByAccount(@AuthenticationPrincipal User current,
