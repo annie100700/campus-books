@@ -1,11 +1,8 @@
 spring:
   application:
     name: campus-books
-  datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    username: Annie
-    password: ${DB_PASSWORD}
-    url: jdbc:mysql://127.0.0.1:3306/campus_books
+  profiles:
+    active: dev
   jpa:
     database: MYSQL
     properties:
@@ -13,9 +10,10 @@ spring:
         type:
           json_format_mapper: com.annie.campus_books.utilities.JsonFormatterUtil
         format-sql: true
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   servlet:
     multipart:
       max-file-size: 5MB
@@ -23,11 +21,9 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MY_EMAIL}
-    password: ${EMAIL_PASSWORD}
+    username: ${MAIL_USER}
+    password: ${MAIL_PASSWORD}
     properties:
-      mail:
-        debug: true
         smtp:
           auth: true
           starttls:
