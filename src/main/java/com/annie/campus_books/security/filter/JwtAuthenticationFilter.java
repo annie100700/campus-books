@@ -35,7 +35,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             builder.matcher(HttpMethod.GET, "/books/**"),
             builder.matcher(HttpMethod.POST, "/users/register"),
             builder.matcher(HttpMethod.POST, "/users/login"),
-            builder.matcher(HttpMethod.POST, "/users/refresh")
+            builder.matcher(HttpMethod.POST, "/users/refresh"),
+            builder.matcher(HttpMethod.POST, "/users/forget-password"),
+            builder.matcher(HttpMethod.POST, "/users/reset-password")
     );
 
     @Autowired
