@@ -30,8 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String BEARER_PREFIX = "Bearer ";
 
-    private static final PathPatternRequestMatcher.Builder builder = PathPatternRequestMatcher.withDefaults().
-            basePath("/api.campus-books.com");
+    private static final PathPatternRequestMatcher.Builder builder = PathPatternRequestMatcher.withDefaults();
     private static final List<RequestMatcher> EXCLUDE_PATH = List.of(
             builder.matcher(HttpMethod.GET, "/books/**"),
             builder.matcher(HttpMethod.POST, "/users/register"),

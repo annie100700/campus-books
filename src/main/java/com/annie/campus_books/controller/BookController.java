@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin
-@RequestMapping("/api.campus-books.com/books")
+@RequestMapping("/books")
 @RestController
 public class BookController {
 

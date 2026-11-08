@@ -36,7 +36,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtAuthenticationFilter jwtAuthenticationFilter) {
-        PathPatternRequestMatcher.Builder builder = PathPatternRequestMatcher.withDefaults().basePath("/api.campus-books.com");
+        PathPatternRequestMatcher.Builder builder = PathPatternRequestMatcher.withDefaults();
         httpSecurity.
                 formLogin(AbstractHttpConfigurer::disable).
                 csrf(AbstractHttpConfigurer::disable).
