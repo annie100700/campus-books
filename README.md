@@ -7,8 +7,8 @@ CampusBooks是筆者以學習後端技能為目標打造的個人專案，模擬
 - JWT 驗證
 - 資料庫設計(使用MySQL)
 - JPA/Hibernate
-- 單元測試 (待完善)
-- Dock 容器化 (未來規劃)
+- 單元測試 (進行中)
+- Dock 容器化
 
 ## API Overview端點概覽
 Base URL:
@@ -114,6 +114,12 @@ campus-books/
 └── README.md
 ```
 
+## Deployment Environment佈署環境
+- 雲端平台: Google Cloud Platform
+- Compute Engine: Ubuntu 24.04 LTS
+- Docker和 Docker Compose
+- Nginx 反向代理
+
 ## Tech Stack技術堆疊
 ### 後端
 - Java 21
@@ -145,15 +151,7 @@ campus-books/
 本專案使用Mockito進行單元測試，主要的目標包括:
 - Controller層
 - Service層
-- Repository層  
-  使用以下指令執行測試:
-```
-./mvnw test
-```
-Window環境也可用以下指令:
-```
-mvnw.cmd test
-```
+- Repository層
 目前僅包含BookController、BookService和BookRepo的部分方法。
 
 ## Function功能
@@ -177,25 +175,7 @@ mvnw.cmd test
 ### 授權
 USER僅可對自己擁有的物件進行刪改動作，ADMIN則可對幾乎所有物件進行操作。
 
-## Installation安裝
-### Requirements環境要求
-請確保以下應用已安裝:
-- Java21
-- Maven
-- MySQL8
-- Git
-### Step1. 複製 Repository
-執行以下指令:
-```
-git clone <repository-url>
-cd campus-books
-```
-### Step2. 建立資料庫
-致行以下指令以建立一個MySQL資料庫:
-```
-CREATE DATABASE campus_books;
-```
-### STEP3. 設定環境變數
+## Environment Variables環境變數
 以下是必要的環境變數及其範例:  
 ```
 DB_HOST=localhost  
@@ -208,13 +188,4 @@ MAIL_USER=your_email@gmail.com
 MAIL_PASSWORD=your_app_password
 
 SECRET_KEY=your_secret_key
-```
-### STEP4. 執行應用程式
-你可以用Maven執行:
-```
-./mvnw spring-boot:run
-```
-或是在Windows環境執行以下指令:
-```
-mvnw.cmd spring-boot:run
 ```
